@@ -34,12 +34,14 @@ import javax.swing.table.AbstractTableModel;
 import net.whn.loki.common.Task;
 import net.whn.loki.common.TaskReport;
 
-/**holds an array of job objects and serves as the model
- * for the jobs queue table
+/**
+ * holds an array of job objects and serves as the model for the jobs queue
+ * table
  *
- * DEVNOTE: uses a synchronized list so all access is thread-safe, except
- * any calls that fetch an iterator(for each loop), these calls must be
- * synchronized on the list
+ * DEVNOTE: uses a synchronized list so all access is thread-safe, except any
+ * calls that fetch an iterator(for each loop), these calls must be synchronized
+ * on the list
+ *
  * @author daniel
  */
 public class JobsModel extends AbstractTableModel implements ICommon,
@@ -47,6 +49,7 @@ public class JobsModel extends AbstractTableModel implements ICommon,
 
     /**
      * called by AWT EQ
+     *
      * @param c
      * @return the name of given column
      */
@@ -57,6 +60,7 @@ public class JobsModel extends AbstractTableModel implements ICommon,
 
     /**
      * called by AWT EQ
+     *
      * @return total number of columns
      */
     @Override
@@ -66,7 +70,7 @@ public class JobsModel extends AbstractTableModel implements ICommon,
 
     /**
      * called by AWT EQ
-     * 
+     *
      * @return current row count of the model.
      */
     @Override
@@ -75,8 +79,8 @@ public class JobsModel extends AbstractTableModel implements ICommon,
     }
 
     /**
-     * fetches the column value on specified row (job).
-     * AWT
+     * fetches the column value on specified row (job). AWT
+     *
      * @param row
      * @param column
      * @return string value
@@ -89,15 +93,14 @@ public class JobsModel extends AbstractTableModel implements ICommon,
             return "";
         }
 
-        
     }
 
     /*BEGIN PACKAGE*/
     /**
-     * initializes columnHeaders, from which is derived columnCount
-     * NOTE: make sure to update Job.getValue() if you change headers.
-     * ...it's probably best to keep everything we want here, then
-     * just hide headers with the JTabel
+     * initializes columnHeaders, from which is derived columnCount NOTE: make
+     * sure to update Job.getValue() if you change headers. ...it's probably
+     * best to keep everything we want here, then just hide headers with the
+     * JTabel
      */
     public JobsModel(File lcd) {
         //TODO - perhaps there is a better way to handle headers?
@@ -138,8 +141,9 @@ public class JobsModel extends AbstractTableModel implements ICommon,
     }
 
     /**
-     * called by AWT EQ -> areSelectedJobsRunning() in MasterR
-     * used if user requests exit
+     * called by AWT EQ -> areSelectedJobsRunning() in MasterR used if user
+     * requests exit
+     *
      * @return
      */
     boolean areJobsRunning() {
@@ -179,8 +183,9 @@ public class JobsModel extends AbstractTableModel implements ICommon,
 
     /**
      * called by master because we're going to remove the jobs which means we
-     * first need to abort all running tasks in them.
-     * NOTE! we're also setting taskstatus back to ready on the tasks!
+     * first need to abort all running tasks in them. NOTE! we're also setting
+     * taskstatus back to ready on the tasks!
+     *
      * @param selectedRows
      * @return
      */
@@ -212,8 +217,8 @@ public class JobsModel extends AbstractTableModel implements ICommon,
     }
 
     /**
-     * called by master for abort all
-     * NOTE! we're also setting taskstatus back to ready on the tasks!
+     * called by master for abort all NOTE! we're also setting taskstatus back
+     * to ready on the tasks!
      */
     ArrayList<Long> getGruntIDsForAllRunningTasks() {
         ArrayList<Long> gruntIDlist = new ArrayList<Long>();
@@ -233,9 +238,8 @@ public class JobsModel extends AbstractTableModel implements ICommon,
     }
 
     /**
-     * we're mutating the jobs, which AWT looks at
-     * signals AWT
-     * junit: yes
+     * we're mutating the jobs, which AWT looks at signals AWT junit: yes
+     *
      * @param jID
      * @param task
      * @param status
@@ -249,7 +253,7 @@ public class JobsModel extends AbstractTableModel implements ICommon,
     }
 
     void resetFailures(int[] rows) {
-        for(int i = 0; i<rows.length; i++) {
+        for (int i = 0; i < rows.length; i++) {
             jobsList.get(rows[i]).resetFailures();
         }
         fireTableDataChanged();
@@ -257,10 +261,8 @@ public class JobsModel extends AbstractTableModel implements ICommon,
 
     /**
      * this updates the job with all the info just returned from the grunt
-     * -status
-     * -gruntID
-     * -output
-     * and also calls compositer if all tiles are done
+     * -status -gruntID -output and also calls compositer if all tiles are done
+     *
      * @param r
      * @returns true if we need to composite tiles
      */
@@ -273,8 +275,8 @@ public class JobsModel extends AbstractTableModel implements ICommon,
             status = j.setReturnTask(r);
             fireTableRowsUpdated(jIndex, jIndex); //tell AWT.EventQueue
 
-            if (t.getStatus() == TaskStatus.DONE && t.isTile() &&
-                    AreFrameTilesDone(j, t.getFrame())) {
+            if (t.getStatus() == TaskStatus.DONE && t.isTile()
+                    && AreFrameTilesDone(j, t.getFrame())) {
                 return true;
             }
         }
@@ -282,9 +284,9 @@ public class JobsModel extends AbstractTableModel implements ICommon,
     }
 
     /**
-     * adds given job to the end of jobsList, then tells AWT.EventQueue
-     * called by addJob in master
-     * junit: yes
+     * adds given job to the end of jobsList, then tells AWT.EventQueue called
+     * by addJob in master junit: yes
+     *
      * @param j
      * @return true if job was successfully added, false if it wasn't
      */
@@ -296,8 +298,8 @@ public class JobsModel extends AbstractTableModel implements ICommon,
     }
 
     /**
-     * removes the jobs selected in the table, excepting running jobs
-     * junit: yes
+     * removes the jobs selected in the table, excepting running jobs junit: yes
+     *
      * @param selectedRows
      * @param masterForm
      */
@@ -331,7 +333,8 @@ public class JobsModel extends AbstractTableModel implements ICommon,
     }
 
     /**
-     *called by MasterR->AWT EQ
+     * called by MasterR->AWT EQ
+     *
      * @return next available Task, null if none
      */
     Task getNextTask() {
@@ -346,8 +349,9 @@ public class JobsModel extends AbstractTableModel implements ICommon,
     }
 
     /**
-     * checks that all jobs are done (i.e. all tasks are complete
-     * no tasks are running.
+     * checks that all jobs are done (i.e. all tasks are complete no tasks are
+     * running.
+     *
      * @return true if all tasks are done or aborted (D), false if otherwise
      */
     boolean areAllJobsDone() {
@@ -363,6 +367,7 @@ public class JobsModel extends AbstractTableModel implements ICommon,
 
     /**
      * test method
+     *
      * @param jobName
      * @return
      */
@@ -393,6 +398,7 @@ public class JobsModel extends AbstractTableModel implements ICommon,
 
     /**
      * for test
+     *
      * @param jobName
      * @return
      */
@@ -409,6 +415,7 @@ public class JobsModel extends AbstractTableModel implements ICommon,
 
     /**
      * called by master before adding a new job
+     *
      * @param nameToCheck
      * @return
      */
@@ -426,7 +433,6 @@ public class JobsModel extends AbstractTableModel implements ICommon,
     }
 
     /*BEGIN PRIVATE*/
-
     //logging
     private static final String className = "net.whn.loki.master.JobsModel";
     private static final Logger log = Logger.getLogger(className);
@@ -436,19 +442,13 @@ public class JobsModel extends AbstractTableModel implements ICommon,
     final private File lokiCfgDir;
 
     private String[] populateColumnHeaders() {
-        return new String[]{
-                    "name",
-                    "failed",
-                    "remain",
-                    "running",
-                    "done",
-                    "status"
-                };
+        return new String[]{"名称", "失败", "剩余", "运行", "完成", "状态"};
     }
 
     /**
-     * pass in the jID to get it's current index
-     * DEVNOTE: this may change if any jobs are removed!
+     * pass in the jID to get it's current index DEVNOTE: this may change if any
+     * jobs are removed!
+     *
      * @param jID
      * @return the Job's current index
      */

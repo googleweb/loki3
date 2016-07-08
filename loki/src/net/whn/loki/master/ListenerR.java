@@ -24,14 +24,12 @@ import net.whn.loki.common.ICommon;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 import java.util.logging.Logger;
 import net.whn.loki.error.ErrorHelper;
 import net.whn.loki.error.MasterFrozenException;
 import net.whn.loki.messaging.AddGruntMsg;
-import net.whn.loki.messaging.FatalThrowableMsg;
 
 /**
  *
@@ -55,12 +53,12 @@ public class ListenerR implements Runnable, ICommon {
                     //unblocked so we can periodically check the interrupt
                 } catch (MasterFrozenException mfe) {
                     ErrorHelper.outputToLogMsgAndKill(null, false, log,
-                            "fatal error. exiting.", mfe.getCause());
+                            "致命错误. 退出.", mfe.getCause());
                 }
             } catch (IOException ex) {
                 //hopefully next time succeeds!
                 //TEST
-                System.out.println("failed to accept new grunt.");
+                System.out.println("接受新的分支失败.");
             }
         }
         //we received a shutdown signal

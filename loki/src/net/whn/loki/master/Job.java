@@ -118,7 +118,7 @@ public class Job implements ICommon, Serializable {
             return m + " * " + m + " = " + Integer.toString(
                     tileMultiplier * tileMultiplier);
         } else {
-            return "disabled";
+            return "禁用";
         }
     }
 
@@ -141,18 +141,17 @@ public class Job implements ICommon, Serializable {
             return Integer.toString(done);
         } else if (column == 5) {
             if (status == JobStatus.A) {
-                return "ready";
+                return "就绪";
             } else if (status == JobStatus.B || status == JobStatus.C) {
-                return "running";
+                return "运行";
             } else if (status == JobStatus.D) {
-                return "done";
+                return "完成";
             } else {
-                log.severe("An unknown jobStatus value was encountered: " +
-                        status);
+                log.severe("遇到了一个未知的任务状态值: " +status);
                 return null;
             }
         } else {
-            log.severe("A value outside of table scope was requested: " +
+            log.severe("值超出了请求表格的范围: " +
                     Integer.toString(column));
             return null;
         }
@@ -178,7 +177,7 @@ public class Job implements ICommon, Serializable {
             } else if (t.getStatus() == TaskStatus.FAILED) {
                 fld++;
             } else {
-                log.severe("status outside of scope: " + t.getStatus());
+                log.severe("状态超出了范围: " + t.getStatus());
             }
         }
         if (rdy != ready) {
@@ -295,7 +294,7 @@ public class Job implements ICommon, Serializable {
         for (Task t : tasks) {
             if (t.getStatus() == TaskStatus.RUNNING) {
                 if (t.getGruntID() == -1) {
-                    log.severe("running task has no associated grunt!");
+                    log.severe("运行的任务没有关联的分支!");
                 }
                 gIDList.add(t.getGruntID());
                 //setTaskStatus(t.getTaskID(), TaskStatus.READY);
@@ -470,7 +469,7 @@ public class Job implements ICommon, Serializable {
             } else if (t.getStatus() == TaskStatus.FAILED) {
                 failed++;
             } else {
-                log.severe("unknown status type!");
+                log.severe("未知的状态类型!");
             }
         }
 
@@ -490,7 +489,7 @@ public class Job implements ICommon, Serializable {
         } else if (ready < 1 && running < 1) {
             status = JobStatus.D;
         } else {
-            log.severe("unknown job state!");
+            log.severe("未知的任务状态!");
         }
     }
 }

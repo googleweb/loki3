@@ -51,7 +51,9 @@ public class CLHelper implements ICommon {
     }
 
     /**
-     * generates command line based on type and values in task, auto file transfer
+     * generates command line based on type and values in task, auto file
+     * transfer
+     *
      * @param task
      * @return command line to pass to shell, or null if unknown type
      */
@@ -101,6 +103,18 @@ public class CLHelper implements ICommon {
         return null;
     }
 
+    /*
+    public static String extractBlenderRenderTime(String stdout) {
+        String[] tokens = stdout.split(" |\\n");
+        for (int i = 0; i < tokens.length; i++) {
+            if (tokens[i].contains("Time:")) {
+                return tokens[i + 1];
+            }
+        }
+
+        return null;
+    }
+     */
     public static String extractBlenderRenderTime(String stdout) {
         Pattern pattern = Pattern.compile("\\sTime:\\s(\\d{2}:\\d{2}.\\d{2})\\s\\(Saving:\\s\\d{2}:\\d{2}.\\d{2}\\)");
         Matcher matcher = pattern.matcher(stdout);
@@ -112,50 +126,63 @@ public class CLHelper implements ICommon {
         return null;
     }
 
-    public static boolean determineBlenderBin(Config cfg)
-             {
+    /**
+     * 判断是否为可执行的blender程序
+     *
+     * @param cfg 配置对象
+     * @return
+     */
+    public static boolean determineBlenderBin(Config cfg) {
+        //可执行标志
         boolean exeOK = true;
-
+        //blender路径
         String blenderBinStr = cfg.getBlenderBin();
-        if (blenderBinStr == null) {
+        if (blenderBinStr == null) {//为null则赋默认值
             blenderBinStr = "blender";
         }
 
-        if (!isBlenderExe(blenderBinStr)) { //no good, ask user to find it
+        if (!isBlenderExe(blenderBinStr)) { //非可执行程序, 询问用户重新选择
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Please select the Blender executable");
+            fileChooser.setDialogTitle("请选择可执行的blender程序");
             while (true) {
-                if (fileChooser.showDialog(null, "Select") ==
-                        JFileChooser.APPROVE_OPTION) {
+                if (fileChooser.showDialog(null, "选择")
+                        == JFileChooser.APPROVE_OPTION) {
                     blenderBinStr = fileChooser.getSelectedFile().getPath();
 
                     if (isBlenderExe(blenderBinStr)) {
                         break;
                     } else {
-                        String msg = "Loki can't validate\n'" +
-                                blenderBinStr + "'\n" +
-                                "as a Blender executable. Use it anyway?";
+                        String msg = "Loki无法验证\n'"
+                                + blenderBinStr + "'\n"
+                                + "是一个合法的blender可执行程序. 一定要使用它么?";
                         int result = JOptionPane.showConfirmDialog(null, msg,
-                                "Valid executable?", JOptionPane.YES_NO_OPTION);
+                                "有效的可执行文件?", JOptionPane.YES_NO_OPTION);
 
-                        log.info("can't validate blender executable: " +
-                                blenderBinStr);
-                        if(result == 0)
+                        log.info("无法验证blender程序的可执行性: "
+                                + blenderBinStr);
+                        if (result == 0) {
                             break;
+                        }
                     }
                 } else {
-                    log.info("loki didn't get a blender exe path; exiting.");
+                    log.info("loki没有获得一个可执行的blender程序路径; 退出中.");
                     return false;
                 }
             }
         }
-        cfg.setBlenderBin(blenderBinStr);
+        cfg.setBlenderBin(blenderBinStr);//写入配置文件
         return exeOK;
     }
 
-    public static boolean isBlenderExe(String blenderBinStr)
-             {
+    /**
+     * 判断是否为可执行的blender程序
+     *
+     * @param blenderBinStr blender路径
+     * @return 是否
+     */
+    public static boolean isBlenderExe(String blenderBinStr) {
 
+        //执行blender版本
         String[] cl = {blenderBinStr, "-v"};
         ProcessHelper pHelper = new ProcessHelper(cl);
 
@@ -163,40 +190,45 @@ public class CLHelper implements ICommon {
         if (result[0].contains("Blender")) {
             return true;
         } else {
-            log.info("not a valid blender executable: " + blenderBinStr);
+            log.info("非可执行的blender程序: " + blenderBinStr);
             return false;
         }
     }
 
-    /*BEGIN PRIVATE*/
-    //logging
+    /* 私有变量定义 */
+    //日志记录
+    /**
+     * log日志记录配置
+     */
     private static final String className = "net.whn.loki.grunt.TaskCLHelper";
+    /**
+     * log日志记录配置
+     */
     private static final Logger log = Logger.getLogger(className);
 
     private static String[] blender_generateCL(String blenderBin,
             File lokiBaseDir, Task t) throws IOException {
-        
+
         File blendFile;
         File outputDirFile;
-        
-        if(t.isAutoFileTranfer()) {
-            blendFile = new File(lokiBaseDir, "fileCache" +
-                File.separator + t.getProjectFileMD5() + ".blend");
+
+        if (t.isAutoFileTranfer()) {
+            blendFile = new File(lokiBaseDir, "fileCache"
+                    + File.separator + t.getProjectFileMD5() + ".blend");
             outputDirFile = new File(lokiBaseDir, "tmp");
         } else {    //manual    
             blendFile = t.getOrigProjFile();
             outputDirFile = new File(t.getOutputDir());
         }
 
-        
         String[] blenderCL = null;
 
         if (blendFile.canRead() && outputDirFile.isDirectory()) {
-            
+
             if (t.isTile()) {
                 File script = GruntIOHelper.blender_setupTileScript(
                         outputDirFile, t);
-                    
+
                 blenderCL = new String[11];
                 blenderCL[0] = blenderBin;
                 blenderCL[1] = "-noaudio";
@@ -209,8 +241,6 @@ public class CLHelper implements ICommon {
                 blenderCL[8] = outputDirFile.getCanonicalPath() + File.separator;
                 blenderCL[9] = "-f";
                 blenderCL[10] = Integer.toString(t.getFrame());
-                
-
 
             } else {    //render the entire frame
                 //example 'blender -b file.blend -o render_# -f 1
@@ -222,23 +252,22 @@ public class CLHelper implements ICommon {
                 blenderCL[3] = "-b";
                 blenderCL[4] = blendFile.getCanonicalPath();
                 blenderCL[5] = "-o";
-                if(t.isAutoFileTranfer()) {
+                if (t.isAutoFileTranfer()) {
                     blenderCL[6] = outputDirFile.getCanonicalPath()
                             + File.separator;
                 } else { //manual
                     blenderCL[6] = outputDirFile.getCanonicalPath()
                             + File.separator + t.getOutputFilePrefix();
                 }
-                
+
                 blenderCL[7] = "-f";
                 blenderCL[8] = Integer.toString(t.getFrame());
-                
 
             }
         } else {
-            log.severe("problems generating blender CL: " +
-                    blendFile.getAbsolutePath() + " " +
-                    outputDirFile.getAbsolutePath());
+            log.severe("problems generating blender CL: "
+                    + blendFile.getAbsolutePath() + " "
+                    + outputDirFile.getAbsolutePath());
         }
 
         return blenderCL;

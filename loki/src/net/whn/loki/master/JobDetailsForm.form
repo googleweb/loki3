@@ -68,10 +68,8 @@
   <SubComponents>
     <Container class="javax.swing.JPanel" name="pnlDetail">
       <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="General"/>
-          </Border>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="javax.swing.BorderFactory.createTitledBorder(&quot;&#x666e;&#x901a;&quot;)" type="code"/>
         </Property>
       </Properties>
 
@@ -165,42 +163,42 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="type:"/>
+            <Property name="text" type="java.lang.String" value="&#x7c7b;&#x578b;:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="status:"/>
+            <Property name="text" type="java.lang.String" value="&#x72b6;&#x6001;:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="task range:"/>
+            <Property name="text" type="java.lang.String" value="&#x4efb;&#x52a1;&#x8303;&#x56f4;:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
-            <Property name="text" type="java.lang.String" value="project file:"/>
+            <Property name="text" type="java.lang.String" value="&#x9879;&#x76ee;&#x6587;&#x4ef6;:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
-            <Property name="text" type="java.lang.String" value="output directory:"/>
+            <Property name="text" type="java.lang.String" value="&#x8f93;&#x51fa;&#x76ee;&#x5f55;:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
-            <Property name="text" type="java.lang.String" value="output file prefix:"/>
+            <Property name="text" type="java.lang.String" value="&#x8f93;&#x51fa;&#x6587;&#x4ef6;&#x524d;&#x7f00;:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblType">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Blender Internal"/>
+            <Property name="text" type="java.lang.String" value="Blender&#x5185;&#x90e8;&#x6e32;&#x67d3;&#x5668;"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblStatus">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Ready"/>
+            <Property name="text" type="java.lang.String" value="&#x5c31;&#x7eea;"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblFirstFrame">
@@ -210,22 +208,22 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblProjFile">
           <Properties>
-            <Property name="text" type="java.lang.String" value="null"/>
+            <Property name="text" type="java.lang.String" value="&#x7a7a;"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblOutputDir">
           <Properties>
-            <Property name="text" type="java.lang.String" value="null"/>
+            <Property name="text" type="java.lang.String" value="&#x7a7a;"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblFilePrefix">
           <Properties>
-            <Property name="text" type="java.lang.String" value="null"/>
+            <Property name="text" type="java.lang.String" value="&#x7a7a;"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
-            <Property name="text" type="java.lang.String" value="to"/>
+            <Property name="text" type="java.lang.String" value="&#x5230;"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblLastFrame">
@@ -235,32 +233,30 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel13">
           <Properties>
-            <Property name="text" type="java.lang.String" value="tile rendering:"/>
+            <Property name="text" type="java.lang.String" value="&#x5206;&#x5757;&#x6e32;&#x67d3;:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblTileRendering">
           <Properties>
-            <Property name="text" type="java.lang.String" value="null"/>
+            <Property name="text" type="java.lang.String" value="&#x7a7a;"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel14">
           <Properties>
-            <Property name="text" type="java.lang.String" value="auto file transfer:"/>
+            <Property name="text" type="java.lang.String" value="&#x6587;&#x4ef6;&#x81ea;&#x52a8;&#x4f20;&#x8f93;:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblAutoFileTransfer">
           <Properties>
-            <Property name="text" type="java.lang.String" value="null"/>
+            <Property name="text" type="java.lang.String" value="&#x7a7a;"/>
           </Properties>
         </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="pnlTaskDetail">
       <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Selected task"/>
-          </Border>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="javax.swing.BorderFactory.createTitledBorder(&quot;&#x6240;&#x9009;&#x4efb;&#x52a1;&quot;)" type="code"/>
         </Property>
       </Properties>
 
@@ -297,16 +293,13 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel23">
           <Properties>
-            <Property name="text" type="java.lang.String" value="task command line:"/>
+            <Property name="text" type="java.lang.String" value="&#x4efb;&#x52a1;&#x547d;&#x4ee4;&#x884c;:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="cbxOutput">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="2">
-                <StringItem index="0" value="stdout"/>
-                <StringItem index="1" value="errout"/>
-              </StringArray>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.DefaultComboBoxModel(new String[] { &quot;&#x6807;&#x51c6;&#x8f93;&#x51fa;&quot;, &quot;&#x9519;&#x8bef;&#x8f93;&#x51fa;&quot; })" type="code"/>
             </Property>
           </Properties>
           <Events>
@@ -337,10 +330,8 @@
     </Container>
     <Container class="javax.swing.JPanel" name="pnlTaskTally">
       <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Task tally"/>
-          </Border>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="javax.swing.BorderFactory.createTitledBorder(&quot;&#x4efb;&#x52a1;&#x8bb0;&#x5f55;&quot;)" type="code"/>
         </Property>
       </Properties>
 
@@ -398,7 +389,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>
-            <Property name="text" type="java.lang.String" value="ready:"/>
+            <Property name="text" type="java.lang.String" value="&#x5c31;&#x7eea;:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblReady">
@@ -413,12 +404,13 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
-            <Property name="text" type="java.lang.String" value="running:"/>
+            <Property name="text" type="java.lang.String" value="&#x8fd0;&#x884c;:"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel10">
           <Properties>
-            <Property name="text" type="java.lang.String" value="done:"/>
+            <Property name="text" type="java.lang.String" value="&#x5b8c;&#x6210;:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblFailed">
@@ -433,7 +425,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel11">
           <Properties>
-            <Property name="text" type="java.lang.String" value="failed:"/>
+            <Property name="text" type="java.lang.String" value="&#x5931;&#x8d25;:"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -471,7 +463,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="btnClose">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Close"/>
+            <Property name="text" type="java.lang.String" value="&#x5173;&#x95ed;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCloseActionPerformed"/>
@@ -479,12 +471,12 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel21">
           <Properties>
-            <Property name="text" type="java.lang.String" value="View generated:"/>
+            <Property name="text" type="java.lang.String" value="&#x67e5;&#x770b;&#x65f6;&#x95f4;:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblViewTime">
           <Properties>
-            <Property name="text" type="java.lang.String" value="null"/>
+            <Property name="text" type="java.lang.String" value="&#x7a7a;"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -500,7 +492,7 @@
                       <Component id="jLabel12" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" alignment="2" min="-2" pref="320" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="28" max="32767" attributes="0"/>
+                  <EmptySpace pref="40" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -537,7 +529,7 @@
         </Container>
         <Component class="javax.swing.JLabel" name="jLabel12">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Task list"/>
+            <Property name="text" type="java.lang.String" value="&#x4efb;&#x52a1;&#x5217;&#x8868;"/>
           </Properties>
         </Component>
       </SubComponents>

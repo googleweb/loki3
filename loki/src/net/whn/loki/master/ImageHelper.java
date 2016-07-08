@@ -20,8 +20,6 @@
  */
 package net.whn.loki.master;
 
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -44,87 +42,88 @@ public class ImageHelper {
         for (int i = 0; i < tileCount; i++) {
             inputFiles[i] = new File(tileDir, Integer.toString(i) + ".png");
             if (!inputFiles[i].isFile()) {
-                log.warning("expected tile file doesn't exist: " +
-                        inputFiles[i].getAbsolutePath());
+                log.warning("expected tile file doesn't exist: "
+                        + inputFiles[i].getAbsolutePath());
                 return false;
             }
         }
 
         try {
-            int divisions = (int)Math.sqrt((double)inputFiles.length);
+            int divisions = (int) Math.sqrt((double) inputFiles.length);
             int numImage = 0;
             // create an array of BufferedImages from the input files inverting the order in the rows
             // (it's cropped from bottom to top but it's composited from top to bottom)
-            BufferedImage[] bufferedImages = new BufferedImage[inputFiles.length];  
-            for (int row = divisions - 1; row >= 0; row--)
-                for (int order = 0; order < divisions; order++)
-                    bufferedImages[numImage++] = ImageIO.read(inputFiles[row*divisions + order]);  
-            
+            BufferedImage[] bufferedImages = new BufferedImage[inputFiles.length];
+            for (int row = divisions - 1; row >= 0; row--) {
+                for (int order = 0; order < divisions; order++) {
+                    bufferedImages[numImage++] = ImageIO.read(inputFiles[row * divisions + order]);
+                }
+            }
+
             BufferedImage image = combineImages(bufferedImages);
             ImageIO.write(image, "png", outputFile);
 
         } catch (IOException ex) {
-            log.warning("failed during tile compositing: "  + ex.getMessage());
+            log.warning("failed during tile compositing: " + ex.getMessage());
             return false;
         }
         cleanup(tileDir, inputFiles, tileCount);
 
-        log.fine("composited " + Integer.toString(tileCount) +
-                " tiles in (ms): " +
-                Long.toString(System.currentTimeMillis() - start));
+        log.fine("composited " + Integer.toString(tileCount)
+                + " tiles in (ms): "
+                + Long.toString(System.currentTimeMillis() - start));
 
         return true;
     }
 
     public static void deleteTileTmpFiles(File lcd, long jID) {
-        File tmpDir = new File (lcd, "tmp");
+        File tmpDir = new File(lcd, "tmp");
         String prefix = Long.toString(jID) + "-";
         File[] tmpFiles = tmpDir.listFiles();
-        for(File tmpTileDir: tmpFiles) {
-            if(tmpTileDir.isDirectory() && tmpTileDir.getName().startsWith(prefix)) {
+        for (File tmpTileDir : tmpFiles) {
+            if (tmpTileDir.isDirectory() && tmpTileDir.getName().startsWith(prefix)) {
                 File[] tileFiles = tmpTileDir.listFiles();
-                for(File tilefile: tileFiles) {
-                    if(!tilefile.delete()) {
-                        log.warning("unable to delete tile file: " +
-                                tilefile.getAbsolutePath());
+                for (File tilefile : tileFiles) {
+                    if (!tilefile.delete()) {
+                        log.warning("无法删除分块文件: "
+                                + tilefile.getAbsolutePath());
                     }
                 }
-                if(!tmpTileDir.delete()) {
-                    log.warning("unable to delete tile dir: " +
-                                tmpTileDir.getAbsolutePath());
+                if (!tmpTileDir.delete()) {
+                    log.warning("无法删除分块目录: "
+                            + tmpTileDir.getAbsolutePath());
                 }
             }
         }
     }
 
     private static void cleanup(File tileDir, File[] inputFiles, int tileCount) {
-        for(File f: inputFiles) {
-            if(!f.delete()) {
-                log.warning("unable to delete tmp tile file: " +
-                        f.getAbsolutePath());
+        for (File f : inputFiles) {
+            if (!f.delete()) {
+                log.warning("无法删除临时分块文件: "
+                        + f.getAbsolutePath());
             }
         }
-        if(!tileDir.delete()) {
-            log.warning("unable to delete tmp tile dir: " +
-                    tileDir.getAbsolutePath());
+        if (!tileDir.delete()) {
+            log.warning("无法删除临时分块目录: "
+                    + tileDir.getAbsolutePath());
         }
     }
 
     /*PRIVATE*/
     //logging
-    private static final String className =
-            "net.whn.loki.master.ImageHelper";
+    private static final String className = "net.whn.loki.master.ImageHelper";
     private static final Logger log = Logger.getLogger(className);
 
     private static BufferedImage combineImages(BufferedImage bufferedImages[]) {
-        int divisions = (int)Math.sqrt((double)bufferedImages.length);
+        int divisions = (int) Math.sqrt((double) bufferedImages.length);
         int actualImage = 0;
         // first we stablish the width and height of the final image
         int finalWidth = 0;
         int finalHeight = 0;
-        for (int i = 0; i < divisions; i++){
+        for (int i = 0; i < divisions; i++) {
             finalWidth += bufferedImages[i].getWidth();
-            finalHeight += bufferedImages[i*divisions].getHeight();
+            finalHeight += bufferedImages[i * divisions].getHeight();
         }
 //        BufferedImage finalImg = new BufferedImage(finalWidth, finalHeight, bufferedImages[0].getType());
         BufferedImage finalImg = new BufferedImage(finalWidth, finalHeight, BufferedImage.TYPE_INT_ARGB);
@@ -139,16 +138,16 @@ public class ImageHelper {
                     return null;
                 }
                 // adding to the final image
-                finalImg.createGraphics().drawImage(bufferedImages[actualImage], rowWidth, rowHeight, null);  
+                finalImg.createGraphics().drawImage(bufferedImages[actualImage], rowWidth, rowHeight, null);
                 rowWidth += bufferedImages[actualImage].getWidth();
-                actualImage++;  
-            }  
+                actualImage++;
+            }
             // after processing the row we get the height of the last processed image 
             // (it's the same for all in the row) and locate at the begining of the row
             rowHeight += bufferedImages[actualImage - 1].getHeight();
             rowWidth = 0;
-        }  
-        
+        }
+
         return finalImg;
     }
 }

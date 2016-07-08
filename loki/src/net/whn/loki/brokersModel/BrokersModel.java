@@ -52,12 +52,12 @@ public class BrokersModel extends AbstractTableModel implements ICommon {
     public BrokersModel(MasterR m, ConcurrentHashMap<String, ProjFile> fCache) {
         //TODO - perhaps there is a better way to handle headers?
         columnHeaders = new String[]{
-                    "name",
-                    "OS",
-                    "cores",
-                    "memory",
-                    "last task",
-                    "status"
+                    "名称",
+                    "系统",
+                    "核数",
+                    "内存",
+                    "最后任务",
+                    "状态"
                 };
 
         master = m;
@@ -149,8 +149,7 @@ public class BrokersModel extends AbstractTableModel implements ICommon {
             throws SocketException, IOException {
         //TODO IndexOutOfBoundsException here
         Broker broker = new Broker(sock, master, this);
-        Thread brokerThread = new Thread(bTGroup, broker,
-                "broker " + broker.getGruntID());
+        Thread brokerThread = new Thread(bTGroup, broker, "broker " + broker.getGruntID());
         broker.setThread(brokerThread);
         brokerThread.start();
 
@@ -316,8 +315,7 @@ public class BrokersModel extends AbstractTableModel implements ICommon {
     private static final String className = "net.whn.loki.master.GruntsModel";
     private static final Logger log = Logger.getLogger(className);
     private final MasterR master;
-    private final List<Broker> brokersList =
-            Collections.synchronizedList(new ArrayList<Broker>());
+    private final List<Broker> brokersList = Collections.synchronizedList(new ArrayList<Broker>());
     private final ConcurrentHashMap<String, ProjFile> fileCacheMap;
     private final String[] columnHeaders;
     private ExecutorService fileSendPool;//for sending files to grunts

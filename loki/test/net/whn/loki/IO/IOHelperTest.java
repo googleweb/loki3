@@ -43,8 +43,7 @@ public class IOHelperTest {
      */
     @Test
     public void testZipDirectory() {
-        File blendFile =
-                new File ("/home/daniel/daniel/loki/blendFiles/XYZ123.blend");
+        File blendFile =new File ("/home/daniel/daniel/loki/blendFiles/XYZ123.blend");
         File lokiCfgDir = new File("/home/daniel/.loki");
 
         MasterIOHelper.addBlendCacheToLokiCache(null,lokiCfgDir, blendFile.getAbsolutePath(),null);
@@ -55,8 +54,7 @@ public class IOHelperTest {
      */
     @Test
     public void testUnzipDirectory() {
-        File zipFile =
-                new File ("/home/daniel/.loki/tmp/blendcache.zip");
+        File zipFile =new File ("/home/daniel/.loki/tmp/blendcache.zip");
 
         File tmpDir = new File("/home/daniel/.loki/tmp/whatup?");
 

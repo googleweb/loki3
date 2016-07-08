@@ -86,33 +86,33 @@ public class Config implements Serializable, ICommon {
 
         //TCP
         connectPort = 53914;
-        
+
         //grunt
         blenderBin = "blender";
         blendCacheMD5 = null;
         autoDiscoverMaster = true;
         masterAddress = null;
         masterIPValid = false;
-        
+
     }
-    
+
     public void setAutoFileHandling(boolean auto) {
         autoFileHandling = auto;
     }
-    
-    public boolean getAutoFileHandling () {
+
+    public boolean getAutoFileHandling() {
         return autoFileHandling;
     }
-    
+
     public boolean isMasterIPValid() {
         return masterIPValid;
     }
-    
+
     public void setMasterIp(InetAddress mAddress) {
         masterAddress = mAddress;
         masterIPValid = true;
     }
-    
+
     public InetAddress getMasterIp() {
         return masterAddress;
     }
@@ -120,11 +120,11 @@ public class Config implements Serializable, ICommon {
     public boolean getAutoDiscoverMaster() {
         return autoDiscoverMaster;
     }
-    
+
     public void setAutoDiscoverMaster(boolean auto) {
         autoDiscoverMaster = auto;
     }
-    
+
     public String getLokiVer() {
         return lokiVer;
     }
@@ -148,7 +148,7 @@ public class Config implements Serializable, ICommon {
     public int getMulticastTTL() {
         return multicastTTL;
     }
-    
+
     public int getConnectPort() {
         return connectPort;
     }
@@ -257,8 +257,9 @@ public class Config implements Serializable, ICommon {
     }
 
     /**
-     * writes unique mastercfg data to loki.cfg. as a rule, any common data
-     * that is not a reference to object is written by master
+     * writes unique mastercfg data to loki.cfg. as a rule, any common data that
+     * is not a reference to object is written by master
+     *
      * @param jIDCounter
      */
     public void setMasterCfg(long jIDCounter, long tIDCounter) {
@@ -269,8 +270,10 @@ public class Config implements Serializable, ICommon {
     }
 
     /**
-     * if a cfg file exists, then it reads the cfg object from it
-     * @return cfg object if file is present, new cfg object otherwise
+     * 如果配置文件存在,然后从它读取配置
+     *
+     * @param lokiCfgDir 配置目录
+     * @return 返回预设的Config对象, 否则创建新的Config对象
      */
     public synchronized static Config readCfgFile(File lokiCfgDir) {
         lokiCfg = new File(lokiCfgDir, "loki.cfg");
@@ -286,30 +289,29 @@ public class Config implements Serializable, ICommon {
                 c = (Config) input.readObject();
                 input.close();
                 time = System.currentTimeMillis() - time;
-                log.finest("config file read in (ms): " + Long.toString(time));
+                log.finest("配置文件读取用时(ms): " + Long.toString(time));
                 return c;
             } catch (Exception ex) {
-                log.warning("failed to read loki.cfg: " + ex.getMessage());
+                log.warning("读取loki.cfg配置文件失败: " + ex.getMessage());
             }
         }
         return new Config(lokiCfgDir);
     }
 
     /**
-     * write the current cfg object to the cfg file. this and the read method
-     * are synchronized so we guarantee that two threads are never reading/
-     * writing the config file at the same time
-     * @param cfg
-     * @throws FileNotFoundException
-     * @throws IOException
+     * 写入当前配置对象到配置文件， 写入和读取方法时同步的，
+     * 因此我们可以保证两个线程永远不能在同一时间读写配置文件
+     * @param lcDir 配置目录
+     * @param cfg 配置对象
+     * @throws FileNotFoundException 找不到文件异常
+     * @throws IOException IO异常
      */
     public synchronized static void writeCfgToFile(File lcDir, Config cfg)
             throws FileNotFoundException, IOException {
         lokiCfg = new File(lcDir, "loki.cfg");
         FileOutputStream file = new FileOutputStream(lokiCfg);
         BufferedOutputStream buffer = new BufferedOutputStream(file);
-        DeflaterOutputStream dout = new DeflaterOutputStream(buffer,
-                fastDeflater);
+        DeflaterOutputStream dout = new DeflaterOutputStream(buffer,fastDeflater);
         ObjectOutput objOut = new ObjectOutputStream(dout);
 
         time = System.currentTimeMillis();
@@ -317,7 +319,7 @@ public class Config implements Serializable, ICommon {
         objOut.flush();
         objOut.close();
         time = System.currentTimeMillis() - time;
-        log.fine("config file written in (ms): " + Long.toString(time));
+        log.fine("配置文件写入用时: " + Long.toString(time));
     }
 
     /*PRIVATE*/

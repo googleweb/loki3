@@ -23,8 +23,6 @@ package net.whn.loki.master;
 import net.whn.loki.common.*;
 import java.awt.EventQueue;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 /**
  *
@@ -103,18 +101,18 @@ public class MasterEQCaller extends EQCaller {
 
             @Override
             public void run() {
-                Object[] options = {"OK", "Stop the Queue"};
+                Object[] options = {"确定", "停止队列"};
                 String prelude =
-                        "One or more tasks in the job queue have failed.\n" +
-                        "Below is output from the first failed task.\n" +
-                        "You can view job\n details for more information.\n" +
-                        "Viewing the log in <userdir>/.loki may also help.\n\n\"";
+                        "队列中的一个或者多个任务失败.\n" +
+                        "下面是第一个失败任务的输出.\n" +
+                        "你可以查看任务\n 详情获取跟多信息.\n" +
+                        "查看<userdir>/.loki目录下日志或许有帮助.\n\n\"";
                 if (!failureMsgOpen) {
                     failureMsgOpen = true;
                     int result = JOptionPane.showOptionDialog(
                             mForm,
                             prelude + failureStr + "\"",
-                            "task failed",
+                            "任务失败",
                             JOptionPane.YES_NO_OPTION,
                             JOptionPane.WARNING_MESSAGE,
                             null,

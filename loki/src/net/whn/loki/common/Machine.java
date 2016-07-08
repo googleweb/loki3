@@ -39,7 +39,7 @@ public class Machine implements Serializable {
         osMxbean = (com.sun.management.OperatingSystemMXBean)
                     ManagementFactory.getOperatingSystemMXBean();
 
-        String tmpHostname = "unknown";
+        String tmpHostname = "未知";
         //first try to get local hostname
         try {
             InetAddress localMachine = InetAddress.getLocalHost();

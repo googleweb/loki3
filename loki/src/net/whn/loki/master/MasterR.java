@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.whn.loki.IO.IOHelper;
@@ -46,20 +45,19 @@ import net.whn.loki.grunt.GruntR;
 import net.whn.loki.messaging.*;
 
 /**
- *This is the central control point for all job and grunt management
+ * This is the central control point for all job and grunt management
+ *
  * @author daniel
  */
 public class MasterR extends MsgQueue implements Runnable, ICommon {
 
     /**
-     *default constructor
+     * default constructor
      */
-    public MasterR(File lokiBase, Config c, AnnouncerR a,
-            int mQSize) {
+    public MasterR(File lokiBase, Config c, AnnouncerR a, int mQSize) {
         super(mQSize);
 
         //log.setLevel(Level.FINE);
-
         lokiCfgDir = lokiBase;
         lokiCacheDir = new File(lokiCfgDir, "fileCache");
 
@@ -82,7 +80,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
         } catch (Exception ex) {   //TODO - hmmm...
             //if either of these fail, we have to quit
             //TODO - message for user
-            log.severe("listener failed to setup!");
+            log.severe("监听设置失败!");
             throw new IllegalThreadStateException();
         }
 
@@ -101,8 +99,9 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
     }
 
     /**
-     * called by a local grunt (if one is present) right after startup
-     * we need this so we can tell the local grunt to shutdown when master does
+     * called by a local grunt (if one is present) right after startup we need
+     * this so we can tell the local grunt to shutdown when master does
+     *
      * @param g
      */
     public void setGrunt(GruntR g) {
@@ -122,6 +121,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
 
     /**
      * passes a handle of the masterForm object for master to use
+     *
      * @param mjForm
      */
     public void setMasterForm(MasterForm mjForm) {
@@ -151,7 +151,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
                 break;
             } catch (IOException ex) {
                 ErrorHelper.outputToLogMsgAndKill(masterForm, false, log,
-                    "Loki encountered an error", ex);
+                        "Loki遇到一个错误", ex);
             } catch (MasterFrozenException mfe) {
                 //impossible
             }
@@ -161,6 +161,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
     /*BEGIN PACKAGE*/
     /**
      * called by AWT for user exit request - are there any jobs running (tasks)
+     *
      * @return true if yes, false if none
      */
     boolean areJobsRunning() {
@@ -173,6 +174,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
 
     /**
      * used by masterForm to get handle on jobsModel
+     *
      * @return
      */
     JobsModel getJobsModel() {
@@ -181,6 +183,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
 
     /**
      * used by masterForm to get handle on gruntsModel
+     *
      * @return
      */
     BrokersModel getBrokersModel() {
@@ -211,11 +214,12 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
 
     /**
      * main decision point for masterThread
+     *
      * @param m
      * @throws InterruptedException
      */
     private void handleMessage(Msg m) throws InterruptedException, IOException,
-        MasterFrozenException {
+            MasterFrozenException {
         MsgType type = m.getType();
 
         if (type == MsgType.ADD_JOB) {
@@ -246,7 +250,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
             handleReport(m);
         } else if (type == MsgType.LOST_BUSY_GRUNT) {
             handleLostBusyGrunt(m);
-        }else if (type == MsgType.RESET_FAILURES) {
+        } else if (type == MsgType.RESET_FAILURES) {
             resetFailures(m);
         } else if (type == MsgType.FILE_REQUEST) {
             brokersModel.handleFileRequest(m);
@@ -255,12 +259,13 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
         } else if (type == MsgType.FATAL_ERROR) {
             handleFatalError(m);
         } else {
-            log.warning("master received unknown MsgType: " + type);
+            log.warning("主干收到了未知的消息类型: " + type);
         }
     }
 
     /**
      * calls shutdown then throws up the stack
+     *
      * @param m
      */
     private void handleFatalError(Msg m) {
@@ -268,15 +273,15 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
         Throwable throwable = fatalMsg.getThrowable();
 
         ErrorHelper.outputToLogMsgAndKill(masterForm, false, log,
-                "Loki encountered a fatal error.\n" +
-                "Click OK to exit.", throwable);
+                "Loki遇到一个致命的错误.\n"
+                + "单击确定退出.", throwable);
 
         shutdown();
     }
 
     /**
-     * passes new job to jobsModel
-     * called by addJob in masterForm
+     * passes new job to jobsModel called by addJob in masterForm
+     *
      * @param j
      */
     private void addJob(Msg m) {
@@ -286,34 +291,34 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
         String blendCacheMd5 = null;
 
         if (!jobsModel.isJobNameUnique(newJobInput.getName())) {
-            EQCaller.showMessageDialog(masterForm, "Job name exists",
-                    "A job with the name '" +
-                    newJobInput.getName() +
-                    "' already exists. Please use a unique name.",
+            EQCaller.showMessageDialog(masterForm, "任务名称存在",
+                    "一个名为("
+                    + newJobInput.getName()
+                    + ")任务已经存在.请使用一个唯一的名称.",
                     JOptionPane.INFORMATION_MESSAGE);
         } else {
-            if(newJobInput.getAutoFileTransfer()) {
-               //auto file transfer is enabled, so 
-               //cache the project file and add to fileCacheMap
+            if (newJobInput.getAutoFileTransfer()) {
+                //auto file transfer is enabled, so 
+                //cache the project file and add to fileCacheMap
                 md5 = MasterIOHelper.newProjFileToCache(fileCacheMap,
-                    newJobInput.getProjFileName(), lokiCacheDir, cfg);
+                        newJobInput.getProjFileName(), lokiCacheDir, cfg);
                 blendCacheMd5 = MasterIOHelper.addBlendCacheToLokiCache(
-                    fileCacheMap, lokiCacheDir, newJobInput.getProjFileName(),
-                    cfg); 
+                        fileCacheMap, lokiCacheDir, newJobInput.getProjFileName(),
+                        cfg);
             }
-            
+
             File pFile = new File(newJobInput.getProjFileName());
             long size = pFile.length();
-            
-            if(newJobInput.getAutoFileTransfer()) {
-               if (md5 == null) {
-                //oops, we failed to cacheFile
-                EQCaller.showMessageDialog(masterForm, "failed to add job",
-                        "Adding a new job failed. Filesystem permission problem?",
-                        JOptionPane.WARNING_MESSAGE);
-                log.severe("unable to add new job.");
 
-                } 
+            if (newJobInput.getAutoFileTransfer()) {
+                if (md5 == null) {
+                    //oops, we failed to cacheFile
+                    EQCaller.showMessageDialog(masterForm, "添加任务失败",
+                            "添加一个新的任务失败. 文件系统权限问题?",
+                            JOptionPane.WARNING_MESSAGE);
+                    log.severe("不能添加新的任务.");
+
+                }
             }
             //if auto file transfer was on, then
             //file was successfully added to cache; create/add new job
@@ -331,15 +336,16 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
 
     /**
      * removes one or more jobs as selected by user in job table
+     *
      * @param m
      */
     private void removeJobs(Msg m) throws IOException, InterruptedException,
-        MasterFrozenException {
+            MasterFrozenException {
         final RemoveJobsMsg message = (RemoveJobsMsg) m;
         //get gruntIDs and set tasks back to READY here:
-        ArrayList<Long> gruntIDs =
-                jobsModel.getGruntIDsForSelectedRunningJobs(
-                message.getRowsToRemove());
+        ArrayList<Long> gruntIDs
+                = jobsModel.getGruntIDsForSelectedRunningJobs(
+                        message.getRowsToRemove());
 
         abortGrunts(gruntIDs);
 
@@ -349,7 +355,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
     }
 
     private void abortAll_StopQueue() throws IOException, InterruptedException,
-        MasterFrozenException {
+            MasterFrozenException {
         queueRunning = false;
         masterForm.stopQueue();
         ArrayList<Long> gruntIDs = jobsModel.getGruntIDsForAllRunningTasks();
@@ -383,8 +389,9 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
     }
 
     /**
-     * listener picked up a new grunt on the accept port, so let's
-     * create a broker for it and add it to gruntsModel
+     * listener picked up a new grunt on the accept port, so let's create a
+     * broker for it and add it to gruntsModel
+     *
      * @param m
      */
     private void addGrunt(Msg m) {
@@ -401,6 +408,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
 
     /**
      * original message sent by user from MasterForm
+     *
      * @param m
      */
     private void shutdown() {
@@ -430,17 +438,17 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
 
             //now write it to file
             Config.writeCfgToFile(lokiCfgDir, cfg);
-            log.finest("writing cfg to file, as always.");
+            log.finest("写入配置到文件, 一如既往.");
 
             //wait up to 1 second for listenerThread
             listenerThread.join(1000);
 
         } catch (IOException ex) {
-            MasterEQCaller.showMessageDialog(masterForm, "filesystem error",
-                    "failed to write to loki.cfg.\n" +
-                    "Check filesystem permissions.",
+            MasterEQCaller.showMessageDialog(masterForm, "文件系统错误",
+                    "写入配置loki.cfg失败.\n"
+                    + "检查文件系统权限.",
                     JOptionPane.WARNING_MESSAGE);
-            log.warning("failed to write cfg to file:" + ex.getMessage());
+            log.warning("写入配置到文件失败:" + ex.getMessage());
         } catch (InterruptedException ex) {
             //do nothing...we're exiting
         }
@@ -449,7 +457,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
         //finally, set shutdown to true so I exit main loop
         shutdown = true;
         try {
-        Thread.sleep(1000); //make sure local grunt has time to shutdown
+            Thread.sleep(1000); //make sure local grunt has time to shutdown
         } catch (InterruptedException ex) {
             //squelch...
         }
@@ -457,12 +465,13 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
     }
 
     /**
-     * refresh the UI w/ the latest info for grunt x; also update cores
-     * in case that changed
+     * refresh the UI w/ the latest info for grunt x; also update cores in case
+     * that changed
+     *
      * @param m
      */
     private void updateGrunt(Msg m) {
-        log.finest("updating grunt");
+        log.finest("更新分支中");
         UpdateGruntMsg message = (UpdateGruntMsg) m;
         brokersModel.updateGruntRow(message.getGruntID());
         if (message.getFirstMachineReply()) {
@@ -472,6 +481,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
 
     /**
      * grunt x notified us that it is idle
+     *
      * @param m
      * @throws InterruptedException
      */
@@ -485,7 +495,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
         try {
             assignIdleGrunts();
         } catch (LostGruntException ex) {   //kill the lost grunt!
-            log.fine("lost grunt with id: " + ex.getGruntID());
+            log.fine("失去连接-分支: " + ex.getGruntID());
             try {
                 deliverMessage(new RemoveGruntMsg(ex.getGruntID())); //notify myself
             } catch (MasterFrozenException mfe) {
@@ -496,6 +506,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
 
     /**
      * remove grunt from gruntsModel; update cores on UI
+     *
      * @param m
      */
     private void removeGrunt(Msg m) {
@@ -533,19 +544,18 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
             Job job = jobsModel.getJobDetails(message.getRow());
             MasterEQCaller.invokeViewJobDetails(masterForm, job);
         } catch (IOException ex) {
-            log.severe("IOEx while trying to clone Job: " + ex.getMessage());
+            log.severe("当尝试克隆任务时IO异常: " + ex.getMessage());
         } catch (ClassNotFoundException cex) {
-            log.severe("failed trying to clone Job: " + cex.getMessage());
+            log.severe("当尝试克隆任务时失败: " + cex.getMessage());
         }
     }
 
     /**
      *
-     *this method should be called in 3 cases:
-     * 1. user has pressed the start button
-     * 2. a new (idle) grunt has connected
-     * 3. a grunt is done with a task and now idle
-     * 
+     * this method should be called in 3 cases: 1. user has pressed the start
+     * button 2. a new (idle) grunt has connected 3. a grunt is done with a task
+     * and now idle
+     *
      * @throws InterruptedException if inter-thread messaging times out
      */
     private void assignIdleGrunts() throws LostGruntException {
@@ -572,6 +582,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
 
     /**
      * called as a result of receiving a 'startQueue' message from UI
+     *
      * @throws InterruptedException if MQDelivery failed
      */
     private void queueStarting() throws InterruptedException {
@@ -581,7 +592,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
         try {
             assignIdleGrunts();
         } catch (LostGruntException ex) {   //kill the lost grunt!
-            log.fine("lost grunt with id: " + ex.getGruntID());
+            log.fine("失去连接-分支: " + ex.getGruntID());
             try {
                 deliverMessage(new RemoveGruntMsg(ex.getGruntID())); //notify myself
             } catch (MasterFrozenException mfe) {
@@ -592,10 +603,10 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
 
     private void compositeTiles(Task t) {
         File tmpDir = new File(lokiCfgDir, "tmp");
-        File tileDir = new File(tmpDir, t.getJobID() + "-" +
-                t.getFrame());
-        String fileName = t.getOutputFilePrefix() +
-                t.getOutputFileName();
+        File tileDir = new File(tmpDir, t.getJobID() + "-"
+                + t.getFrame());
+        String fileName = t.getOutputFilePrefix()
+                + t.getOutputFileName();
 
         CompositeTiles cTiles = new CompositeTiles(
                 tileDir,
@@ -605,19 +616,20 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
 
         compositer.submit(cTiles);
     }
-    
+
     //call when we lose contact with a busy grunt
     // - assume task is lost and reset given task to 'ready'
     private void handleLostBusyGrunt(Msg m) {
-      LostBusyGruntMsg lostBusyGruntMsg = (LostBusyGruntMsg) m;
-     
-      Task t = lostBusyGruntMsg.getGruntTask();
-      jobsModel.setTaskStatus(t.getJobID(), t.getTaskID(),
-                    TaskStatus.READY);
+        LostBusyGruntMsg lostBusyGruntMsg = (LostBusyGruntMsg) m;
+
+        Task t = lostBusyGruntMsg.getGruntTask();
+        jobsModel.setTaskStatus(t.getJobID(), t.getTaskID(),
+                TaskStatus.READY);
     }
 
     /**
      * called when a grunt is done/failed with a task
+     *
      * @param m
      * @throws InterruptedException if delivery timed out
      */
@@ -638,18 +650,17 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
             Task t = tReport.getTask();
             jobsModel.setReturnTask(tReport);
             String failureMsg;
-            if(t.getStdout().length() > 0) {
+            if (t.getStdout().length() > 0) {
                 failureMsg = t.getStdout();
             } else if (t.getErrOut().length() > 0) {
                 failureMsg = t.getErrOut();
-            } else
-                failureMsg = "unknown";
+            } else {
+                failureMsg = "未知";
+            }
 
-            String failed = "Task failed for grunt '" +
-                    brokersModel.getGruntName(t.getGruntID()) +
-                    "' with the message:\n\"" + failureMsg + "\"";
-
-
+            String failed = "任务失败-分支("
+                    + brokersModel.getGruntName(t.getGruntID())
+                    + ")-错误信息:\n\"" + failureMsg + "\"";
 
             MasterEQCaller.invokeTaskFailureNotification(masterForm, failureMsg);
             log.warning(failed);
@@ -658,9 +669,9 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
             Task t = tReport.getTask();
             jobsModel.setTaskStatus(t.getJobID(), t.getTaskID(),
                     TaskStatus.READY);
-            String aborted = "User aborted task and quit Loki on grunt '" +
-                    brokersModel.getGruntName(t.getGruntID()) + "'.";
-            MasterEQCaller.showMessageDialog(masterForm, "task aborted",
+            String aborted = "用户中止了任务并且退出了Loki在分支("
+                    + brokersModel.getGruntName(t.getGruntID()) + ").";
+            MasterEQCaller.showMessageDialog(masterForm, "任务中止",
                     aborted, JOptionPane.INFORMATION_MESSAGE);
 
         } else if (tReport.getTask().getStatus() == TaskStatus.MASTER_ABORT) {
@@ -668,8 +679,7 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
             jobsModel.setTaskStatus(t.getJobID(), t.getTaskID(),
                     TaskStatus.READY);
         } else {
-            log.severe("don't know how to handle tasktype: " +
-                    tReport.getTask().getStatus());
+            log.severe("不知道如何去处理该任务类型: " + tReport.getTask().getStatus());
         }
     }
 
@@ -686,9 +696,9 @@ public class MasterR extends MsgQueue implements Runnable, ICommon {
         public void run() {
             long start = System.currentTimeMillis();
             ImageHelper.compositeTiles(tileDir, tilesPerFrame, outputFile);
-            log.fine("composited " + outputFile.getAbsolutePath() +
-                    " in (ms): " + Long.toString(
-                    System.currentTimeMillis() - start));
+            log.fine("合成 " + outputFile.getAbsolutePath()
+                    + " 用时 (ms): " + Long.toString(
+                            System.currentTimeMillis() - start));
         }
 
         /*PRIVATE*/

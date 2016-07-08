@@ -34,7 +34,7 @@ public class GruntDetailsForm extends LokiForm {
     public GruntDetailsForm(GruntDetails d) {
         initComponents();
         if (d != null) {
-            setTitle("Grunt details for '" + d.getHostname() + "'");
+            setTitle("(" + d.getHostname() + ")" + "分支详情");
             lblOSName.setText(d.getOsName());
             lblOSVersion.setText(d.getOsVersion());
             lblOSArch.setText(d.getOsArchitecture());
@@ -88,15 +88,15 @@ public class GruntDetailsForm extends LokiForm {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Grunt Details");
+        setTitle("分支详情");
 
-        pnlOS.setBorder(javax.swing.BorderFactory.createTitledBorder("Operating System"));
+        pnlOS.setBorder(javax.swing.BorderFactory.createTitledBorder("操作系统"));
 
-        jLabel1.setText("name:");
+        jLabel1.setText("名称:");
 
-        jLabel2.setText("version:");
+        jLabel2.setText("版本:");
 
-        jLabel3.setText("architecture:");
+        jLabel3.setText("架构:");
 
         javax.swing.GroupLayout pnlOSLayout = new javax.swing.GroupLayout(pnlOS);
         pnlOS.setLayout(pnlOSLayout);
@@ -113,7 +113,7 @@ public class GruntDetailsForm extends LokiForm {
                     .addComponent(lblOSName)
                     .addComponent(lblOSVersion)
                     .addComponent(lblOSArch))
-                .addContainerGap(288, Short.MAX_VALUE))
+                .addContainerGap(368, Short.MAX_VALUE))
         );
         pnlOSLayout.setVerticalGroup(
             pnlOSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,13 +132,13 @@ public class GruntDetailsForm extends LokiForm {
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
-        pnlResources.setBorder(javax.swing.BorderFactory.createTitledBorder("Resources"));
+        pnlResources.setBorder(javax.swing.BorderFactory.createTitledBorder("资源"));
 
-        jLabel7.setText("cores:");
+        jLabel7.setText("核数:");
 
-        jLabel8.setText("total physical memory:");
+        jLabel8.setText("总物理内存:");
 
-        jLabel9.setText("total swap memory:");
+        jLabel9.setText("总交换内存总:");
 
         javax.swing.GroupLayout pnlResourcesLayout = new javax.swing.GroupLayout(pnlResources);
         pnlResources.setLayout(pnlResourcesLayout);
@@ -155,7 +155,7 @@ public class GruntDetailsForm extends LokiForm {
                     .addComponent(lblCores)
                     .addComponent(lblMemory)
                     .addComponent(lblSwapMemory))
-                .addContainerGap(289, Short.MAX_VALUE))
+                .addContainerGap(374, Short.MAX_VALUE))
         );
         pnlResourcesLayout.setVerticalGroup(
             pnlResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -174,13 +174,13 @@ public class GruntDetailsForm extends LokiForm {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlEnvironment.setBorder(javax.swing.BorderFactory.createTitledBorder("Environment"));
+        pnlEnvironment.setBorder(javax.swing.BorderFactory.createTitledBorder("运行环境"));
 
-        jLabel10.setText("username:");
+        jLabel10.setText("用户名:");
 
-        jLabel11.setText("user home directory:");
+        jLabel11.setText("用户主目录:");
 
-        jLabel12.setText("current working directory:");
+        jLabel12.setText("当前工作目录:");
 
         javax.swing.GroupLayout pnlEnvironmentLayout = new javax.swing.GroupLayout(pnlEnvironment);
         pnlEnvironment.setLayout(pnlEnvironmentLayout);
@@ -197,7 +197,7 @@ public class GruntDetailsForm extends LokiForm {
                     .addComponent(lblUserName)
                     .addComponent(lblHomeDir)
                     .addComponent(lblWorkingDir))
-                .addContainerGap(288, Short.MAX_VALUE))
+                .addContainerGap(389, Short.MAX_VALUE))
         );
         pnlEnvironmentLayout.setVerticalGroup(
             pnlEnvironmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,7 +216,7 @@ public class GruntDetailsForm extends LokiForm {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton1.setText("OK");
+        jButton1.setText("确定");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);

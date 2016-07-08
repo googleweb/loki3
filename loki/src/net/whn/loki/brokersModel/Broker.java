@@ -30,8 +30,6 @@ import net.whn.loki.common.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import net.whn.loki.error.ErrorHelper;
 import net.whn.loki.error.MasterFrozenException;
 import net.whn.loki.messaging.*;
@@ -66,18 +64,18 @@ public class Broker implements Runnable, ICommon {
                     //nothing to do here
                 } catch (MasterFrozenException mfe) {
                     ErrorHelper.outputToLogMsgAndKill(null, false, log,
-                            "fatal error. exiting.", ex);
+                            "致命错误. 退出.", ex);
                 }
                 log.throwing(className, "run()", ex);
                 break;
             } catch (InterruptedException ex) {
                 ErrorHelper.outputToLogMsgAndKill(null, false, log,
-                        "fatal error. exiting.", ex);
+                        "致命错误. 退出.", ex);
                 System.exit(-1);
                 break;
             } catch (MasterFrozenException mfe) {
                 ErrorHelper.outputToLogMsgAndKill(null, false, log,
-                        "fatal error. exiting.", mfe);
+                        "致命错误. 退出.", mfe);
                 System.exit(-1);
             }
         }
@@ -90,11 +88,11 @@ public class Broker implements Runnable, ICommon {
             
         } catch (InterruptedException ex) {
             ErrorHelper.outputToLogMsgAndKill(null, false, log,
-                        "fatal error. exiting.", ex);
+                        "致命错误. 退出.", ex);
                 System.exit(-1);
         } catch (MasterFrozenException mfe) {
             ErrorHelper.outputToLogMsgAndKill(null, false, log,
-                        "fatal error. exiting.", mfe);
+                        "致命错误. 退出.", mfe);
                 System.exit(-1);
         }
     }
@@ -157,13 +155,13 @@ public class Broker implements Runnable, ICommon {
             throws SocketException, IOException {
         gruntID = gruntIDCounter++;
         bSSock = new BrokerStreamSocket(gSocket);   //throws SocketException
-        machine = new Machine("fetching...");
+        machine = new Machine("搜寻中...");
         master = m;
         lokiBaseDir = m.getLokiCfgDir();
         brokersModel = bModel;
         status = GruntStatus.BUSY;
         taskPending = false;
-        statusStr = "unknown";
+        statusStr = "未知";
         assignedTask = null;
         lastMachineUpdate = null;
         lastTaskTime = null;
@@ -198,9 +196,9 @@ public class Broker implements Runnable, ICommon {
     void setGruntStatus(GruntStatus s) {
         status = s;
         if (status == GruntStatus.IDLE) {
-            statusStr = "idle";
+            statusStr = "空闲";
         } else if (status == GruntStatus.BUSY) {
-            statusStr = "busy";
+            statusStr = "忙";
         }
     }
 

@@ -12,41 +12,51 @@
  *You should have received a copy of the GNU General Public License
  *along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.whn.loki.common;
 
 /**
- *provides a common set of enums
+ * 提供了一些常用的枚举数据
+ *
  * @author daniel
  */
 public interface ICommon {
 
-    enum FileCacheType {BLEND, BLEND_CACHE};
+    enum FileCacheType {
+        BLEND, BLEND_CACHE
+    };
 
-    enum LokiRole { GRUNT, GRUNTCL, MASTER, MASTER_GRUNT, ASK };
-
-    /**
-     *A - remaining, stopped
-     *B - remaining, tasks RUNNING
-     *C - all assigned, RUNNING
-     *D - all tasks finished or ABORTED
-     */
-    enum JobStatus { A, B, C, D };
+    enum LokiRole {
+        GRUNT, GRUNTCL, MASTER, MASTER_GRUNT, ASK
+    };
 
     /**
-     * //TODO - is 'requested' really necessary? investigate during
-     * next task algorithm...
-     * 
+     * A - remaining, stopped B - remaining, tasks RUNNING C - all assigned,
+     * RUNNING D - all tasks finished or ABORTED
      */
-    enum TaskStatus { READY, RUNNING, DONE, FAILED,
-        LOCAL_ABORT, MASTER_ABORT, LOST_GRUNT };
+    enum JobStatus {
+        A, B, C, D
+    };
 
-    enum ReturnStatus { DONE, FAILED };
+    /**
+     * //TODO - is 'requested' really necessary? investigate during next task
+     * algorithm...
+     *
+     */
+    enum TaskStatus {
+        READY, RUNNING, DONE, FAILED,
+        LOCAL_ABORT, MASTER_ABORT, LOST_GRUNT
+    };
+
+    enum ReturnStatus {
+        DONE, FAILED
+    };
 
     /**
      * expand this as needed
      */
-    enum JobType { BLENDER };
+    enum JobType {
+        BLENDER
+    };
 
     /**
      * expand as needed
@@ -78,12 +88,14 @@ public interface ICommon {
     /**
      * grunt status as displayed in gruntList
      */
-    enum GruntStatus { IDLE, BUSY };
+    enum GruntStatus {
+        IDLE, BUSY
+    };
 
     /**
      * grunt update text status
      */
-    enum GruntTxtStatus { 
+    enum GruntTxtStatus {
         IDLE, BUSY, FETCH, PREP_CACHE, SEND,
         PENDING_SEND, ABORT, ERROR
     };
@@ -105,5 +117,5 @@ public interface ICommon {
         FILE_REPLY,
         MASTER_SHUTDOWN,
         IDLE
-        };
+    };
 }

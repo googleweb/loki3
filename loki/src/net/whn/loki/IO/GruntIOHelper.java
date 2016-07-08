@@ -36,7 +36,6 @@ import java.text.DecimalFormat;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 import net.whn.loki.common.Config;
-import net.whn.loki.IO.IOHelper;
 import net.whn.loki.common.ICommon.FileCacheType;
 import net.whn.loki.common.ProgressUpdate;
 import net.whn.loki.common.ProjFile;
@@ -105,7 +104,6 @@ public class GruntIOHelper extends IOHelper {
                     amountRead = sockIn.read(buffer, 0, (int) remaining);
                 }
 
-
                 digest.update(buffer, 0, amountRead);
                 outFile.write(buffer, 0, amountRead);
                 remaining -= amountRead;
@@ -119,8 +117,8 @@ public class GruntIOHelper extends IOHelper {
 
             md5 = binToHex(digest.digest());
             if (!md5.equals(expectedMD5)) {
-                log.warning("file's actual md5 does not match it's pFile md5:" +
-                        md5 + "/" + expectedMD5);
+                log.warning("file's actual md5 does not match it's pFile md5:"
+                        + md5 + "/" + expectedMD5);
             } else {
                 try {
                     addTmpToCache(fcType, fileCacheMap, md5, lokiCacheDir,
@@ -143,8 +141,9 @@ public class GruntIOHelper extends IOHelper {
     }
 
     /**
-     * makes the given blendCacheActive (if not already active) by deleting
-     * the old directory, and unzipping from the file cache
+     * makes the given blendCacheActive (if not already active) by deleting the
+     * old directory, and unzipping from the file cache
+     *
      * @param lcDir
      * @param bcDirName
      */
@@ -251,9 +250,14 @@ public class GruntIOHelper extends IOHelper {
         return script;
     }
 
-    /*PRIVATE*/
-    //logging
-    private static final String className =
-            "net.whn.loki.grunt.GruntIOHelper";
+    /* 私有变量定义 */
+    //日志记录
+    /**
+     * log日志记录配置
+     */
+    private static final String className = "net.whn.loki.grunt.GruntIOHelper";
+    /**
+     * log日志记录配置
+     */
     private static final Logger log = Logger.getLogger(className);
 }

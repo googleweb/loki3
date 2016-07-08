@@ -21,7 +21,6 @@
 package net.whn.loki.grunt;
 
 import net.whn.loki.IO.GruntIOHelper;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.whn.loki.common.AboutForm;
@@ -52,40 +51,40 @@ public class GruntForm extends LokiForm {
 
     public void setStatus(GruntStatusText s) {
         if (s.getStatus() == GruntTxtStatus.BUSY) {
-            lblStatus.setText("busy");
+            lblStatus.setText("忙");
             pBar.setIndeterminate(true);
         } else if (s.getStatus() == GruntTxtStatus.IDLE) {
-            lblStatus.setText("idle");
+            lblStatus.setText("空闲");
             pBar.setValue(0);
             pBar.setIndeterminate(false);
         } else if (s.getStatus() == GruntTxtStatus.FETCH) {
-            String txt = "fetching file " +
+            String txt = "读取文件 " +
                     GruntIOHelper.generateHumanReadableFileSize(s.getFileSize());
             lblStatus.setText(txt);
             pBar.setIndeterminate(false);
             log.fine(txt);
         } else if (s.getStatus() == GruntTxtStatus.PREP_CACHE) {
-            lblStatus.setText("preparing blendcache");
+            lblStatus.setText("准备blend文件缓存");
             pBar.setIndeterminate(true);
         }else if (s.getStatus() == GruntTxtStatus.SEND) {
-            String txt = "sending output file " +
+            String txt = "发送输出文件中 " +
                     GruntIOHelper.generateHumanReadableFileSize(s.getFileSize());
             lblStatus.setText(txt);
             pBar.setIndeterminate(false);
             log.fine(txt);
         } else if (s.getStatus() == GruntTxtStatus.PENDING_SEND) {
-            lblStatus.setText("waiting to send output file");
+            lblStatus.setText("等待发送输出文件");
             pBar.setIndeterminate(false);
         } else if (s.getStatus() == GruntTxtStatus.ABORT) {
-            lblStatus.setText("task aborted");
+            lblStatus.setText("任务中止");
             pBar.setValue(0);
             pBar.setIndeterminate(false);
         } else if (s.getStatus() == GruntTxtStatus.ERROR) {
-            lblStatus.setText("error");
+            lblStatus.setText("错误");
             pBar.setValue(0);
             pBar.setIndeterminate(false);
         } else {
-            log.warning("unknown setStatus value: " + s);
+            log.warning("未知的状态值: " + s);
         }
 
     }
@@ -145,7 +144,7 @@ public class GruntForm extends LokiForm {
         miAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Loki Render - grunt");
+        setTitle("Loki Render - 分支");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -153,7 +152,7 @@ public class GruntForm extends LokiForm {
             }
         });
 
-        pBar.setToolTipText("displays activity while a task is running, or progress bar during file transfer");
+        pBar.setToolTipText("任务运行时显示活动状态, 或者文件传输时显示进度条");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -183,15 +182,15 @@ public class GruntForm extends LokiForm {
             .addGap(0, 64, Short.MAX_VALUE)
         );
 
-        lblConnection.setText("attempting to connect with master...");
-        lblConnection.setToolTipText("current connection status with the master");
+        lblConnection.setText("尝试连接到主分支...");
+        lblConnection.setToolTipText("当前主分支连接状态");
 
-        lblStatus.setText("idle");
-        lblStatus.setToolTipText("this grunt's current status");
+        lblStatus.setText("空闲");
+        lblStatus.setToolTipText("本分支当前状态");
 
-        jLabel1.setText("Connection:");
+        jLabel1.setText("连接:");
 
-        jLabel2.setText("My status:");
+        jLabel2.setText("我的状态:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -206,7 +205,7 @@ public class GruntForm extends LokiForm {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblConnection)
                     .addComponent(lblStatus))
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addContainerGap(175, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,15 +223,15 @@ public class GruntForm extends LokiForm {
                 .addContainerGap())
         );
 
-        menuFile.setText("File");
+        menuFile.setText("文件");
 
         miLog.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
-        miLog.setText("View Log");
+        miLog.setText("查看日志");
         miLog.setEnabled(false);
         menuFile.add(miLog);
 
         miPreferences.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        miPreferences.setText("Preferences");
+        miPreferences.setText("首选项");
         miPreferences.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miPreferencesActionPerformed(evt);
@@ -241,7 +240,7 @@ public class GruntForm extends LokiForm {
         menuFile.add(miPreferences);
 
         miQuit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        miQuit.setText("Quit");
+        miQuit.setText("退出");
         miQuit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miQuitActionPerformed(evt);
@@ -251,10 +250,10 @@ public class GruntForm extends LokiForm {
 
         jMenuBar1.add(menuFile);
 
-        menuTask.setText("Task");
+        menuTask.setText("任务");
 
         miAbort.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
-        miAbort.setText("Abort and quit");
+        miAbort.setText("中止并退出");
         miAbort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miAbortActionPerformed(evt);
@@ -264,9 +263,9 @@ public class GruntForm extends LokiForm {
 
         jMenuBar1.add(menuTask);
 
-        menuHelp.setText("Help");
+        menuHelp.setText("帮助");
 
-        miAbout.setText("About");
+        miAbout.setText("关于");
         miAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miAboutActionPerformed(evt);
@@ -311,9 +310,9 @@ public class GruntForm extends LokiForm {
         boolean quit = true;
         if (grunt.isBusy()) {
             int result = JOptionPane.showConfirmDialog(this,
-                    "A task is currently running. If you quit now, the\n" +
-                    "task will be aborted and progress will be lost.",
-                    "Abort and Quit?",
+                    "一个任务正在运行. 如果你现在退出, 该\n" +
+                    "任务将会被中止并且进程将会丢失.",
+                    "中止并退出?",
                     JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result != 0) {
                 quit = false;
@@ -353,8 +352,8 @@ public class GruntForm extends LokiForm {
         boolean quit = true;
         if (grunt.isBusy()) {
             int result = JOptionPane.showConfirmDialog(this,
-                    "Progress on the current task will be lost. Are you sure?",
-                    "Abort and quit?",
+                    "当前任务进程将会丢失，你确定退出?",
+                    "中止并退出?",
                     JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result != 0) {
                 quit = false;

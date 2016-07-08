@@ -47,7 +47,7 @@ public abstract class MsgQueue {
         MasterFrozenException{
 
         if(!messageQueue.offer(message, 10, TimeUnit.SECONDS)) {
-            log.severe("failed to delivermessage w/ 10 second time out.");
+            log.severe("在10s超时时间中发送消息失败.");
             throw new MasterFrozenException(null);
         }
     }

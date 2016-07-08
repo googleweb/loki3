@@ -32,7 +32,6 @@ import java.net.SocketTimeoutException;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.whn.loki.common.Config;
@@ -78,10 +77,10 @@ public class AnnouncerR implements Runnable {
 
         String masterIP = detectMaster();
         if (masterIP != null) {
-            MasterEQCaller.showMessageDialog(dummyForm, "Master detected",
-                    "Loki master already running on system '" + masterIP + "'.",
+            MasterEQCaller.showMessageDialog(dummyForm, "主干探测",
+                    "Loki主干已经运行在系统(" + masterIP + ").",
                     JOptionPane.WARNING_MESSAGE);
-            log.info("detected master at:" + masterIP);
+            log.info("探测到主干Ip:" + masterIP);
         }
 
         while (!Thread.currentThread().isInterrupted()) {

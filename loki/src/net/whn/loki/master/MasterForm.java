@@ -32,7 +32,6 @@ import net.whn.loki.common.AboutForm;
 import net.whn.loki.common.Config;
 import net.whn.loki.common.GruntDetails;
 import net.whn.loki.common.LokiForm;
-import net.whn.loki.common.Main;
 import net.whn.loki.error.MasterFrozenException;
 import net.whn.loki.common.PreferencesForm;
 import net.whn.loki.error.ErrorHelper;
@@ -76,7 +75,7 @@ public class MasterForm extends LokiForm implements ICommon {
      */
     public void stopQueue() {
         queueRunning = false;
-        btnStart.setText("Start");
+        btnStart.setText("开始");
         btnStart.setSelected(queueRunning);
         manager.setQueueRunningFalse();
     }
@@ -93,7 +92,7 @@ public class MasterForm extends LokiForm implements ICommon {
     }
 
     public void updateCores(int cores) {
-        lblCores.setText("cores: " + Integer.toString(cores));
+        lblCores.setText("核数: " + Integer.toString(cores));
     }
 
     /**
@@ -125,10 +124,10 @@ public class MasterForm extends LokiForm implements ICommon {
             ajForm.setVisible(true);
             manager.deliverMessage(new AddJobMsg(j, ajForm));
         } catch (InterruptedException IntEx) {
-            log.severe("interrupted exception: " + IntEx.toString());
+            log.severe("中断异常: " + IntEx.toString());
         } catch (MasterFrozenException mfe) {
             ErrorHelper.outputToLogMsgAndKill(this, false, log,
-                    "fatal error. click ok to exit.", mfe.getCause());
+                    "致命错误. 单击确定退出.", mfe.getCause());
             System.exit(-1);
         }
     }
@@ -187,7 +186,7 @@ public class MasterForm extends LokiForm implements ICommon {
         helpMenu = new javax.swing.JMenu();
         miAbout = new javax.swing.JMenuItem();
 
-        pmiViewJob.setText("View details");
+        pmiViewJob.setText("查看详情");
         pmiViewJob.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pmiViewJobActionPerformed(evt);
@@ -195,7 +194,7 @@ public class MasterForm extends LokiForm implements ICommon {
         });
         pmenuJobOptions.add(pmiViewJob);
 
-        pmiRemoveJob.setText("Remove");
+        pmiRemoveJob.setText("移除");
         pmiRemoveJob.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pmiRemoveJobActionPerformed(evt);
@@ -203,7 +202,7 @@ public class MasterForm extends LokiForm implements ICommon {
         });
         pmenuJobOptions.add(pmiRemoveJob);
 
-        pmiResetFailures.setText("Reset failed tasks");
+        pmiResetFailures.setText("重置失败任务");
         pmiResetFailures.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pmiResetFailuresActionPerformed(evt);
@@ -211,7 +210,7 @@ public class MasterForm extends LokiForm implements ICommon {
         });
         pmenuJobOptions.add(pmiResetFailures);
 
-        pmiAbortAll.setText("Abort all and stop queue");
+        pmiAbortAll.setText("中止所有任务并停止队列");
         pmiAbortAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pmiAbortAllActionPerformed(evt);
@@ -219,7 +218,7 @@ public class MasterForm extends LokiForm implements ICommon {
         });
         pmenuJobOptions.add(pmiAbortAll);
 
-        pmiViewGrunt.setText("View details");
+        pmiViewGrunt.setText("查看详情");
         pmiViewGrunt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pmiViewGruntActionPerformed(evt);
@@ -227,7 +226,7 @@ public class MasterForm extends LokiForm implements ICommon {
         });
         pmenuGruntOptions.add(pmiViewGrunt);
 
-        pmiQuitGrunt.setText("Quit after task (quit now if idle)");
+        pmiQuitGrunt.setText("任务结束后退出 (空闲时立即退出)");
         pmiQuitGrunt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pmiQuitGruntActionPerformed(evt);
@@ -235,7 +234,7 @@ public class MasterForm extends LokiForm implements ICommon {
         });
         pmenuGruntOptions.add(pmiQuitGrunt);
 
-        pmiQuitAllGrunts.setText("Quit all grunts after tasks (quit now if idle)");
+        pmiQuitAllGrunts.setText("退出所有分支当任务结束后(空闲时立即退出)");
         pmiQuitAllGrunts.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pmiQuitAllGruntsActionPerformed(evt);
@@ -243,7 +242,7 @@ public class MasterForm extends LokiForm implements ICommon {
         });
         pmenuGruntOptions.add(pmiQuitAllGrunts);
 
-        pmiNewJob.setText("New Job");
+        pmiNewJob.setText("新建任务");
         pmiNewJob.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pmiNewJobActionPerformed(evt);
@@ -252,7 +251,7 @@ public class MasterForm extends LokiForm implements ICommon {
         pmenuNewJob.add(pmiNewJob);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Loki Render - master");
+        setTitle("Loki Render - 主干");
         setName("managerForm"); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -260,37 +259,37 @@ public class MasterForm extends LokiForm implements ICommon {
             }
         });
 
-        scrollJobs.setToolTipText("right-click for a context-sensitive popup menu");
+        scrollJobs.setToolTipText("右键激活弹出菜单");
 
         jobsTable.setModel(jobsModel);
-        jobsTable.setToolTipText("right-click for a context-sensitive popup menu");
+        jobsTable.setToolTipText("右键激活弹出菜单");
         scrollJobs.setViewportView(jobsTable);
 
         gruntsTable.setModel(brokersModel);
-        gruntsTable.setToolTipText("right-click for a context-sensitive popup menu");
+        gruntsTable.setToolTipText("右键激活弹出菜单");
         scrollGrunts.setViewportView(gruntsTable);
 
-        progressBarQueue.setToolTipText("displays the progress of finished tasks in the job queue");
+        progressBarQueue.setToolTipText("显示队列中任务结束的进程");
 
-        lblCores.setText("cores: 0");
-        lblCores.setToolTipText("displays the total number of CPU cores currently in the farm");
+        lblCores.setText("核数: 0");
+        lblCores.setToolTipText("显示当前农场中CPU的总核数");
 
-        jLabel2.setText("Job Queue");
+        jLabel2.setText("任务队列");
 
-        jLabel3.setText("Grunts");
+        jLabel3.setText("分支");
 
-        btnStart.setText("Start");
-        btnStart.setToolTipText("start and stop the job queue");
+        btnStart.setText("开始");
+        btnStart.setToolTipText("开始和停止任务队列");
         btnStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnStartActionPerformed(evt);
             }
         });
 
-        fileMenu.setText("File");
+        fileMenu.setText("文件");
 
         miPreferences.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        miPreferences.setText("Preferences   ");
+        miPreferences.setText("首选项");
         miPreferences.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miPreferencesActionPerformed(evt);
@@ -299,7 +298,7 @@ public class MasterForm extends LokiForm implements ICommon {
         fileMenu.add(miPreferences);
 
         miQuit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        miQuit.setText("Quit");
+        miQuit.setText("退出");
         miQuit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miQuitActionPerformed(evt);
@@ -309,10 +308,10 @@ public class MasterForm extends LokiForm implements ICommon {
 
         jMenuBar1.add(fileMenu);
 
-        jobsMenu.setText("Jobs");
+        jobsMenu.setText("任务");
 
         miNewJob.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        miNewJob.setText("New");
+        miNewJob.setText("新建");
         miNewJob.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miNewJobActionPerformed(evt);
@@ -321,7 +320,7 @@ public class MasterForm extends LokiForm implements ICommon {
         jobsMenu.add(miNewJob);
 
         miViewJob.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_J, java.awt.event.InputEvent.CTRL_MASK));
-        miViewJob.setText("View details");
+        miViewJob.setText("查看详情");
         miViewJob.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miViewJobActionPerformed(evt);
@@ -330,7 +329,7 @@ public class MasterForm extends LokiForm implements ICommon {
         jobsMenu.add(miViewJob);
 
         miRemoveJob.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
-        miRemoveJob.setText("Remove");
+        miRemoveJob.setText("移除");
         miRemoveJob.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miRemoveJobActionPerformed(evt);
@@ -339,7 +338,7 @@ public class MasterForm extends LokiForm implements ICommon {
         jobsMenu.add(miRemoveJob);
 
         miResetFailures.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
-        miResetFailures.setText("Reset failed tasks");
+        miResetFailures.setText("重置失败任务");
         miResetFailures.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miResetFailuresActionPerformed(evt);
@@ -348,7 +347,7 @@ public class MasterForm extends LokiForm implements ICommon {
         jobsMenu.add(miResetFailures);
 
         miAbortJob.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
-        miAbortJob.setText("Abort all and stop queue");
+        miAbortJob.setText("中止任务停止队列");
         miAbortJob.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miAbortJobActionPerformed(evt);
@@ -358,10 +357,10 @@ public class MasterForm extends LokiForm implements ICommon {
 
         jMenuBar1.add(jobsMenu);
 
-        jMenu1.setText("Grunts");
+        jMenu1.setText("分支");
 
         miViewGrunt.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
-        miViewGrunt.setText("View Details");
+        miViewGrunt.setText("查看详情");
         miViewGrunt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miViewGruntActionPerformed(evt);
@@ -371,9 +370,9 @@ public class MasterForm extends LokiForm implements ICommon {
 
         jMenuBar1.add(jMenu1);
 
-        helpMenu.setText("Help");
+        helpMenu.setText("帮助");
 
-        miAbout.setText("About");
+        miAbout.setText("关于");
         miAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miAboutActionPerformed(evt);
@@ -468,13 +467,13 @@ public class MasterForm extends LokiForm implements ICommon {
             queueRunning = true;
             try {
                 manager.deliverMessage(new Msg(MsgType.START_QUEUE));
-                btnStart.setText("Stop");
+                btnStart.setText("停止");
             } catch (InterruptedException ex) {
                 ErrorHelper.outputToLogMsgAndKill(this, false, log,
-                        "fatal error. click ok to exit.", ex);
+                        "致命错误. 单击确定退出.", ex);
             } catch (MasterFrozenException mfe) {
                 ErrorHelper.outputToLogMsgAndKill(this, false, log,
-                        "fatal error. click ok to exit.", mfe.getCause());
+                        "致命错误. 单击确定退出.", mfe.getCause());
                 System.exit(-1);
             }
         } else {  //stop the queue
@@ -550,8 +549,8 @@ public class MasterForm extends LokiForm implements ICommon {
     private void abortAllJobs() {
         if (manager.areJobsRunning()) {
             int result = JOptionPane.showConfirmDialog(this,
-                    "All running tasks will be aborted. Continue?",
-                    "Abort all jobs and stop queue?",
+                    "所有运行的任务将会中止. 继续?",
+                    "中止任务停止队列?",
                     JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result == 0) {
                 sendMsg2Manager(new Msg(MsgType.ABORT_ALL));
@@ -569,7 +568,7 @@ public class MasterForm extends LokiForm implements ICommon {
                     MsgType.QUIT_GRUNT, selectedGrunt));
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Please select a grunt first.");
+                    "请先选择一个分支.");
         }
     }
 
@@ -584,8 +583,7 @@ public class MasterForm extends LokiForm implements ICommon {
             sendMsg2Manager(new SelectedGruntMsg(
                     MsgType.VIEW_GRUNT, selectedGrunt));
         } else {
-            JOptionPane.showMessageDialog(this,
-                    "Please select a grunt first.");
+            JOptionPane.showMessageDialog(this,"请先选择一个分支.");
         }
     }
 
@@ -595,7 +593,7 @@ public class MasterForm extends LokiForm implements ICommon {
             sendMsg2Manager(new SelectedGruntMsg(MsgType.VIEW_JOB, selectedJob));
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Please select a job, then select 'View Job Details'.");
+                    "请先选择一个任务, 然后选择(查看详情).");
         }
     }
 
@@ -606,7 +604,7 @@ public class MasterForm extends LokiForm implements ICommon {
             sendMsg2Manager(new ResetFailuresMsg(MsgType.RESET_FAILURES, rows));
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Please select one or more jobs first.");
+                    "请先选择一个或者多个任务.");
         }
     }
 
@@ -616,10 +614,10 @@ public class MasterForm extends LokiForm implements ICommon {
         if (rows.length > 0) {
             if (manager.areJobsRunning(rows)) {
                 int result = JOptionPane.showConfirmDialog(this,
-                        "One or more selected jobs have running tasks.\n" +
-                        "The tasks will be aborted and the jobs will be\n" +
-                        "removed from the queue. Continue?",
-                        "Abort selected jobs and remove?",
+                        "一个或者多个任务正在运行.\n" +
+                        "这些任务将会被中止然后会\n" +
+                        "从任务队列中删除. 继续?",
+                        "中止所选任务然后移除?",
                         JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (result == 0) {
                     sendMsg2Manager(new RemoveJobsMsg(MsgType.REMOVE_JOBS, rows));
@@ -630,7 +628,7 @@ public class MasterForm extends LokiForm implements ICommon {
 
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Please select one or more jobs, then select 'Remove'.");
+                    "请先选择一个或者多个任务, 然后选择(移除).");
         }
     }
 
@@ -640,12 +638,12 @@ public class MasterForm extends LokiForm implements ICommon {
             exit = true;
         } else {
             int result = JOptionPane.showConfirmDialog(this,
-                    "If you quit the master now, grunts will continue\n" +
-                    "running tasks, then wait to send their output\n" +
-                    "files to the master when it starts again. However,\n" +
-                    "the local grunt's task progress (if a local grunt\n" +
-                    "is running) will be lost. Are you sure you want to quit?",
-                    "Quit the master?",
+                    "如果你现在退出主干, 分支将会继续\n" +
+                    "运行任务, 然后等待发送它们的输出\n" +
+                    "文件到主干当他们重新启动时.然而,\n" +
+                    "本地分支任务进程(如果一个本地分支\n" +
+                    "任务正在运行) 将会丢失. 你确定退出?",
+                    "退出主干?",
                     JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result == 0) {
                 exit = true;
@@ -673,11 +671,11 @@ public class MasterForm extends LokiForm implements ICommon {
             manager.deliverMessage(m);
         } catch (InterruptedException ex) {
             ErrorHelper.outputToLogMsgAndKill(this, false, log,
-                    "fatal error. click ok to exit.", ex);
+                    "致命错误. 单击确定退出.", ex);
             System.exit(-1);
         } catch (MasterFrozenException mfe) {
             ErrorHelper.outputToLogMsgAndKill(this, false, log,
-                    "fatal error. click ok to exit.", mfe.getCause());
+                    "致命错误. 单击确定退出.", mfe.getCause());
             System.exit(-1);
         }
     }

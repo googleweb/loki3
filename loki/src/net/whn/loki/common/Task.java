@@ -27,13 +27,14 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- *represents a task of one or more tasks within a job
+ * represents a task of one or more tasks within a job
+ *
  * @author daniel
  */
 public class Task implements ICommon, Serializable, Cloneable {
 
-    public Task(JobType t, int f, long jID, String m, String bcm, 
-            String bcd, long s, String oDir, String oPrefix, 
+    public Task(JobType t, int f, long jID, String m, String bcm,
+            String bcd, long s, String oDir, String oPrefix,
             File oPFile, boolean aFileTransfer, boolean tRender,
             int tl, int tff,
             TileBorder tBorder) {
@@ -78,6 +79,7 @@ public class Task implements ICommon, Serializable, Cloneable {
 
     /**
      * called by master once on shutdown to get current idcounter
+     *
      * @return the current job id counter
      */
     public static long getTaskIDCounter() {
@@ -86,6 +88,7 @@ public class Task implements ICommon, Serializable, Cloneable {
 
     /**
      * called by master once on startup if we're loading from a cfg file
+     *
      * @param jCounter
      */
     public static void setTaskIDCounter(long jCounter) {
@@ -203,15 +206,15 @@ public class Task implements ICommon, Serializable, Cloneable {
     public String getOutputFilePrefix() {
         return outputFilePrefix;
     }
-    
+
     public File getOrigProjFile() {
         return origProjFile;
     }
-    
+
     public boolean isAutoFileTranfer() {
         return autoFileTransfer;
     }
-    
+
     public void setErrout(String eout) {
         errout = eout;
     }
@@ -230,12 +233,10 @@ public class Task implements ICommon, Serializable, Cloneable {
             throws IOException {
 
         taskTime = CLHelper.extractBlenderRenderTime(stdout);
-        File outputFile = new File(
-                CLHelper.blender_getRenderedFileName(stdout));
+        File outputFile = new File(CLHelper.blender_getRenderedFileName(stdout));
         tmpOutputFileName = outputFile.getName();
-        outputFileExt = tmpOutputFileName.substring(
-                tmpOutputFileName.lastIndexOf('.') + 1, tmpOutputFileName.length());
-        if(autoFileTransfer) {
+        outputFileExt = tmpOutputFileName.substring(tmpOutputFileName.lastIndexOf('.') + 1, tmpOutputFileName.length());
+        if (autoFileTransfer) {
             outputFileMD5 = IOHelper.generateMD5(outputFile);
         }
         outputFileSize = outputFile.length();
@@ -263,7 +264,7 @@ public class Task implements ICommon, Serializable, Cloneable {
     private volatile TaskStatus status;
     private long gruntID;
     private String gruntName;
-    
+
     //output
     private String[] taskCL;
     private String stdout;

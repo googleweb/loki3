@@ -52,7 +52,7 @@ public class PreferencesForm extends LokiForm {
         } else if (cfg.getRole() == LokiRole.MASTER_GRUNT) {
             rbtnMasterAndGrunt.setSelected(true);
         } else {
-            log.severe("unknown role: " + cfg.getRole());
+            log.severe("位置角色: " + cfg.getRole());
         }
         
         if(cfg.getAutoFileHandling()) {
@@ -84,18 +84,23 @@ public class PreferencesForm extends LokiForm {
         txtCurrentCacheSize.setText(cfg.getCacheSizeStr());
     }
     
-    //validation stuff
+    /**
+     * ip地址正则字符串
+     */
     private static final String IPADDRESS_PATTERN = 
 		"^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
 		"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
 		"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
 		"([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
     
-    
+    /**
+     * 正则验证是否为合法ip地址
+     * @param ip 待验证数据
+     * @return 合法ip
+     */
     public static boolean validateIP(final String ip) {
         Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
         Matcher matcher = pattern.matcher(ip);
-        
         return matcher.matches();
     }
 
@@ -155,7 +160,7 @@ public class PreferencesForm extends LokiForm {
         jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Preferences");
+        setTitle("首选项");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -164,13 +169,13 @@ public class PreferencesForm extends LokiForm {
 
         pnlGeneral.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        pnlRole.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Role", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DejaVu Sans", 1, 13))); // NOI18N
+        pnlRole.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "角色", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null));
         pnlRole.setToolTipText("");
 
-        jLabel1.setText("Select Loki Render's role on startup:");
+        jLabel1.setText("选择Loki Render启动时的角色");
 
         btngrpRole.add(rbtnGrunt);
-        rbtnGrunt.setText("Grunt");
+        rbtnGrunt.setText("分支");
         rbtnGrunt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbtnGruntActionPerformed(evt);
@@ -178,14 +183,15 @@ public class PreferencesForm extends LokiForm {
         });
 
         btngrpRole.add(rbtnMaster);
-        rbtnMaster.setText("Master");
+        rbtnMaster.setText("主干");
 
         btngrpRole.add(rbtnMasterAndGrunt);
-        rbtnMasterAndGrunt.setText("Master and Grunt");
+        rbtnMasterAndGrunt.setText("主干和分支");
 
         btngrpRole.add(rbtnAskMe);
+        rbtnAskMe.setFont(null);
         rbtnAskMe.setSelected(true);
-        rbtnAskMe.setText("Ask me");
+        rbtnAskMe.setText("每次询问");
 
         javax.swing.GroupLayout pnlRoleLayout = new javax.swing.GroupLayout(pnlRole);
         pnlRole.setLayout(pnlRoleLayout);
@@ -219,19 +225,19 @@ public class PreferencesForm extends LokiForm {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlCache.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Project File Cache", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DejaVu Sans", 1, 13))); // NOI18N
+        pnlCache.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "项目文件缓存", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null));
 
-        jLabel2.setText("Set a target limit of");
+        jLabel2.setText("设置一个目标限值");
 
         spinnerCacheSizeLimit.setModel(new javax.swing.SpinnerNumberModel(100, 50, 4000, 10));
-        spinnerCacheSizeLimit.setToolTipText("Loki will limit the cache size to this value, unless all the cached files are still being used by the job queue, in which case the cache will be allowed to grow larger.");
+        spinnerCacheSizeLimit.setToolTipText("Loki将会把缓存大小限定到这个值,除非所有的缓存文件都在被队列使用,在这种情况下缓存将会允许继续增长.");
 
-        jLabel3.setText("MB of space for the cache");
+        jLabel3.setText("MB 缓存空间");
 
-        jLabel7.setText("Current cache size:");
+        jLabel7.setText("当前缓存大小:");
 
         txtCurrentCacheSize.setText("0 MB");
-        txtCurrentCacheSize.setToolTipText("cache size will exceed the target limit if cached files are still associated with queued jobs.");
+        txtCurrentCacheSize.setToolTipText("缓存值将会超过目标限值如果缓存文件一直被队列任务使用时.");
 
         javax.swing.GroupLayout pnlCacheLayout = new javax.swing.GroupLayout(pnlCache);
         pnlCache.setLayout(pnlCacheLayout);
@@ -250,7 +256,7 @@ public class PreferencesForm extends LokiForm {
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtCurrentCacheSize)))
-                .addContainerGap(162, Short.MAX_VALUE))
+                .addContainerGap(280, Short.MAX_VALUE))
         );
         pnlCacheLayout.setVerticalGroup(
             pnlCacheLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,12 +272,12 @@ public class PreferencesForm extends LokiForm {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
-        pnlFileHandling.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Automatic File Transfer and Caching", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DejaVu Sans", 1, 13))); // NOI18N
+        pnlFileHandling.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "文件自动传输和缓存", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null));
 
         btngrpFileHandling.add(rbtnAutoFile);
         rbtnAutoFile.setSelected(true);
-        rbtnAutoFile.setText("Enable");
-        rbtnAutoFile.setToolTipText("Loki automatically transfers and caches files between nodes as needed. \nIn most cases you want this.");
+        rbtnAutoFile.setText("启用");
+        rbtnAutoFile.setToolTipText("Loki在需要的节点间自动传输和缓存文件. \n在大多数情况正是你需要.");
         rbtnAutoFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbtnAutoFileActionPerformed(evt);
@@ -279,15 +285,15 @@ public class PreferencesForm extends LokiForm {
         });
 
         btngrpFileHandling.add(rbtnManualFile);
-        rbtnManualFile.setText("Disable");
-        rbtnManualFile.setToolTipText("You'll need to setup a network share in this mode. Typically used for large projects.");
+        rbtnManualFile.setText("禁用");
+        rbtnManualFile.setToolTipText("在这种模式下你需要配置一个网络共享. 适用于较大的项目.");
         rbtnManualFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbtnManualFileActionPerformed(evt);
             }
         });
 
-        btnFileHelp.setText("Help");
+        btnFileHelp.setText("帮助");
         btnFileHelp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFileHelpActionPerformed(evt);
@@ -307,7 +313,7 @@ public class PreferencesForm extends LokiForm {
                         .addComponent(btnFileHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlFileHandlingLayout.createSequentialGroup()
                         .addComponent(rbtnManualFile)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 501, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlFileHandlingLayout.setVerticalGroup(
@@ -345,15 +351,15 @@ public class PreferencesForm extends LokiForm {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("general", pnlGeneral);
+        jTabbedPane1.addTab("普通", pnlGeneral);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Blender", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DejaVu Sans", 1, 13))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Blender", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null));
 
-        jLabel9.setText("Blender executable path:");
+        jLabel9.setText("Blender可行性程序路径:");
 
-        txtBlenderBin.setToolTipText("loki needs to know the blender executable when it starts as a grunt");
+        txtBlenderBin.setToolTipText("loki作为分支运行时需要知道blender可执行程序的路径");
 
-        btnBrowseForBlenderBin.setText("Browse");
+        btnBrowseForBlenderBin.setText("浏览");
         btnBrowseForBlenderBin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBrowseForBlenderBinActionPerformed(evt);
@@ -367,7 +373,7 @@ public class PreferencesForm extends LokiForm {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtBlenderBin, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
+                    .addComponent(txtBlenderBin, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
@@ -386,12 +392,12 @@ public class PreferencesForm extends LokiForm {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlMasterIp.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Master IP address", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DejaVu Sans", 1, 13))); // NOI18N
-        pnlMasterIp.setToolTipText("restart loki grunt for this setting to take effect");
+        pnlMasterIp.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "主干IP地址", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null));
+        pnlMasterIp.setToolTipText("重启loki分支以使设置生效");
 
         btngrpMasterAddress.add(rbtnAutoIP);
         rbtnAutoIP.setSelected(true);
-        rbtnAutoIP.setText("automatic discovery of address");
+        rbtnAutoIP.setText("自动发现地址");
         rbtnAutoIP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbtnAutoIPActionPerformed(evt);
@@ -399,7 +405,7 @@ public class PreferencesForm extends LokiForm {
         });
 
         btngrpMasterAddress.add(rbtnManualIP);
-        rbtnManualIP.setText("manually specify address");
+        rbtnManualIP.setText("手动制定地址");
         rbtnManualIP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbtnManualIPActionPerformed(evt);
@@ -449,27 +455,27 @@ public class PreferencesForm extends LokiForm {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlMasterIp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addContainerGap(142, Short.MAX_VALUE))
         );
 
-        pnlMasterIp.getAccessibleContext().setAccessibleName("Master  IP address");
+        pnlMasterIp.getAccessibleContext().setAccessibleName("");
         pnlMasterIp.getAccessibleContext().setAccessibleDescription("");
 
-        jTabbedPane1.addTab("local grunt", pnlGrunt);
+        jTabbedPane1.addTab("本地分支", pnlGrunt);
 
-        pnlNetwork.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Network settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DejaVu Sans", 1, 13))); // NOI18N
-        pnlNetwork.setToolTipText("these networks settings cannot currently be changed");
+        pnlNetwork.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "网络设置", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null));
+        pnlNetwork.setToolTipText("网络设置现在不会更改");
 
-        jLabel4.setText("Announce multicast group:");
+        jLabel4.setText("组播地址:");
 
-        jLabel5.setText("Announce port:");
+        jLabel5.setText("广播端口:");
 
-        jLabel6.setText("Accept port:");
+        jLabel6.setText("接收端口:");
 
-        txtMulticastAddress.setToolTipText("This is the multicast address that the master uses to announce itself on the network. Grunts listen on this address to find the master.");
+        txtMulticastAddress.setToolTipText("这个多播地址用于主干在网络上广播自身的地址. 分支监听这个地址来发现主干.");
         txtMulticastAddress.setEnabled(false);
 
-        txtMulticastPort.setToolTipText("This is the port used in combination with the multicast address.");
+        txtMulticastPort.setToolTipText("端口用于多播地址通信.");
         txtMulticastPort.setEnabled(false);
         txtMulticastPort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -477,17 +483,17 @@ public class PreferencesForm extends LokiForm {
             }
         });
 
-        txtAcceptPort.setToolTipText("The port grunts use to establish a connection with the master.");
+        txtAcceptPort.setToolTipText("分支和主干建立连接的端口.");
         txtAcceptPort.setEnabled(false);
 
-        txtTTL.setToolTipText("Time To Live for the multicast announcement. A value of '1' will only hit the local network. ");
+        txtTTL.setToolTipText("多播的存活时间. 值'1' 将会只在本地网络有效. ");
         txtTTL.setEnabled(false);
 
-        jLabel8.setText("Announce TTL:");
+        jLabel8.setText("广播TTL:");
 
-        jLabel10.setText("Announce Interval (ms):");
+        jLabel10.setText("广播间隔 (ms):");
 
-        txtAnnounceInterval.setToolTipText("Time interval between master announcements.");
+        txtAnnounceInterval.setToolTipText("主干广播的时间间隔.");
         txtAnnounceInterval.setEnabled(false);
 
         javax.swing.GroupLayout pnlNetworkLayout = new javax.swing.GroupLayout(pnlNetwork);
@@ -504,7 +510,7 @@ public class PreferencesForm extends LokiForm {
                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlNetworkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtMulticastAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                    .addComponent(txtMulticastAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
                     .addGroup(pnlNetworkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(txtAcceptPort, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(txtAnnounceInterval, javax.swing.GroupLayout.Alignment.LEADING)
@@ -551,27 +557,27 @@ public class PreferencesForm extends LokiForm {
             .addGroup(pnlMasterLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pnlNetwork, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(201, Short.MAX_VALUE))
+                .addContainerGap(226, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("local master", pnlMaster);
+        jTabbedPane1.addTab("本地主干", pnlMaster);
 
-        btnCancel.setText("Cancel");
+        btnCancel.setText("取消");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
             }
         });
 
-        btnSave.setText("Save");
+        btnSave.setText("保存");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
             }
         });
 
-        jLabel11.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jLabel11.setText("Restart Loki after 'Save' for all settings to take effect.");
+        jLabel11.setFont(null);
+        jLabel11.setText("点击保存后重启Loki以使所有设置生效.");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -622,7 +628,7 @@ public class PreferencesForm extends LokiForm {
         if (!CLHelper.isBlenderExe(txtBlenderBin.getText())) {
             valid = false;
             mistakeStr = "'" + txtBlenderBin.getText() +
-                        "' is not a valid Blender \n" + "executable.";
+                        "' 不是一个合法的Blender \n" + "可执行程序.";
                 
         }
 
@@ -638,7 +644,7 @@ public class PreferencesForm extends LokiForm {
         } else if (rbtnMasterAndGrunt.isSelected()) {
             cfg.setRole(LokiRole.MASTER_GRUNT);
         } else {
-            log.severe("unexpected state for role selection");
+            log.severe("选择了意外的角色状态");
         }
         
         cfg.setCacheSizeLimitMB((Integer) spinnerCacheSizeLimit.getValue());
@@ -656,13 +662,13 @@ public class PreferencesForm extends LokiForm {
                     cfg.setAutoDiscoverMaster(false);
                 } catch (UnknownHostException uhex) {
                     valid = false;
-                    mistakeStr = "Please enter a valid Master IP address.";
+                    mistakeStr = "请输入一个合法的主IP地址.";
                     rbtnAutoIP.setSelected(true);
                     txtMasterManualIP.setEnabled(false);
                 } 
             } else {
                 valid = false;
-                mistakeStr = "Please enter a valid Master IP address.";
+                mistakeStr = "请输入一个合法的主IP地址.";
                 rbtnAutoIP.setSelected(true);
                 txtMasterManualIP.setEnabled(false);
             }
@@ -673,7 +679,7 @@ public class PreferencesForm extends LokiForm {
            
            setVisible(false);
         } else {
-            JOptionPane.showMessageDialog(null, mistakeStr, "Notice",
+            JOptionPane.showMessageDialog(null, mistakeStr, "注意",
                         JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -685,8 +691,8 @@ public class PreferencesForm extends LokiForm {
     private void btnBrowseForBlenderBinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseForBlenderBinActionPerformed
         String blenderBinStr = null;
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Please select the Blender executable");
-        if (fileChooser.showDialog(null, "Select") ==
+        fileChooser.setDialogTitle("请选择blender的可执行程序");
+        if (fileChooser.showDialog(null, "选择") ==
                 JFileChooser.APPROVE_OPTION) {
             blenderBinStr = fileChooser.getSelectedFile().getPath();
 
@@ -694,11 +700,11 @@ public class PreferencesForm extends LokiForm {
                 txtBlenderBin.setText(blenderBinStr);
             } else {
                 String msg = "'" + blenderBinStr +
-                        "' is not a valid Blender \n" + "executable.";
-                JOptionPane.showMessageDialog(null, msg, "Notice",
+                        "' 不是一个合法的Blender \n" + "可执行程序.";
+                JOptionPane.showMessageDialog(null, msg, "注意",
                         JOptionPane.WARNING_MESSAGE);
 
-                log.info("not a valid blender executable: " +
+                log.info("不是一个合法的blender可执行程序: " +
                         blenderBinStr);
             }
         }
@@ -738,41 +744,30 @@ public class PreferencesForm extends LokiForm {
 
     private void btnFileHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFileHelpActionPerformed
         String msg =
-                "When enabled, Loki will automatically transfer\n" +
-                "the blend file to grunts, and then the resulting\n" +
-                "renders sent back to the master.  In this mode you should\n" +
-                "always pack your textures and project files into your blend\n" +
-                "file.\n" +
-                "Additionally, files are cached on the grunts so that\n" +
-                "frequently used files are just pulled from the cache\n" +
-                "instead of across the network every time they're needed.\n" +
-                "Loki is smart enough to notice when the blend file has\n" +
-                "changed, even if the file name is the same, and send out\n" +
-                "the latest file version to the grunts.\n" +
+                "   如果启用, Loki将会自动传输blend文件到分支, 将然后将\n" +
+                "渲染结果发送回主干.在这种模式下你需要将你的贴图和项目\n" + 
+                "文件一起打包到blend文件中.此外, 文件缓存在分支上, 因\n" +
+                "此频繁使用的文件将会从缓存获取而不是每次需要它们时访问\n" +
+                "网络 .Loki足够敏捷来通知分支当blend文件改变时, 尽管\n" +
+                "文件名字是相同的, 然后将会发送最新的版本到分支.通常情况\n" +
+                "下你希望这个功能启用, 但是在某些情况下, 这并不理想, \n" +
+                "比如你有一个包含很多文件的大项目, loki将会发送大量时\n" +
+                "间来发送文件, 缓存它们, 等等,并且你将会在每一个分支\n" +
+                "缓存中复制所有项目文件而结束 .在这种情况下选择 '禁用'\n" +
+                "然后设置一个所有电脑都可访问的网络共享(需支持双向读写!),\n" +
+                "然后把项目文件放到这个共享中. 然后每一个节点的Loki的\n" +
+                "项目路径都要指向这一个中心位置.\n" +
                 "\n" +
-                "You'll usually want this enabled, but in certain cases\n" +
-                "this is not ideal, for example if you have a large\n" +
-                "project with many files, then loki will spend a lot\n" +
-                "of time sending files, caching them, etc, and\n" +
-                "you'll also end up with copies of all the project\n" +
-                "files in each grunt's cache.\n\n" +
-                "In such a case select 'Disabled' and setup a network\n" +
-                "share that all computers can access, (both read AND write!)\n" +
-                "and place project files on this share. Then point Loki's\n" +
-                "project paths all to this one central place.\n" +
+                "   设置共享有许多方式:Windows共享,NFS,或者SSHFS有一些\n" +
+                "例子.更先进的分布式文件系统比如GPFS或者Lustre也可以使用.\n" +
                 "\n" +
-                "Such a share can be setup in many ways: Windows share,\n" +
-                "NFS, or SSHFS are a few examples. More advanced distributed\n" +
-                "file systems such as GPFS or Lustre could also be used.\n" +
-                "\n" +
-                "IMPORTANT! - When set to 'Disabled' you must make certain\n" +
-                "that all computers running loki have the EXACT SAME path\n" +
-                "to the project files! For example if you're running Windows\n" +
-                "workstations, then your project path might be:\n" +
+                "   最重要的! - 当我们设置'禁用' 时你必须确保所有运行\n" +
+                "loki的电脑都有准确吸纳共同的项目文件路径!\n"+
+                "例如, 如果你运行在工作站, 你的项目路径可以是:\n" +
                 "X:\\projects\\blender\\projectx\\\n" +
-                "or if all your computers are running linux, then maybe:\n" +
+                "或者你的所有电脑运行在linux, 项目路径可以是:\n" +
                 "/var/projects/blender/projectx/\n";
-                JOptionPane.showMessageDialog(null, msg, "About File Management",
+                JOptionPane.showMessageDialog(null, msg, "关于文件管理",
                         JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnFileHelpActionPerformed
     private final Config cfg;

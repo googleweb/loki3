@@ -52,7 +52,7 @@ public class GruntEQCaller extends EQCaller {
     /**
      * updates the status label on gruntForm
      * @param gForm
-     * @param text
+     * @param s 
      */
     public static void invokeUpdateStatus(final GruntForm gForm,
             final GruntStatusText s) {
@@ -69,8 +69,8 @@ public class GruntEQCaller extends EQCaller {
 
     /**
      * update the task progress bar
-     * @param mForm
-     * @param update
+     * @param gForm
+     * @param update 
      */
     public static void invokeGruntUpdatePBar(final GruntForm gForm,
             final ProgressUpdate update) {

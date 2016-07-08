@@ -125,7 +125,7 @@ public class GruntR implements Runnable, ICommon {
                                 Executors.newSingleThreadScheduledExecutor();
 
                         masterName = cfg.getMasterIp().getHostName();
-                        String msg = "online with master '" + masterName + "'";
+                        String msg = "在线中-主干(" + masterName + ")";
                         if (gruntForm != null) {
                             GruntEQCaller.invokeUpdateConnectionLbl(gruntForm,
                                     msg);
@@ -188,7 +188,7 @@ public class GruntR implements Runnable, ICommon {
                         gruntStreamSock.tryClose();
                     }
                 }
-                String msg = "attempting to connect with master...";
+                String msg = "尝试连接到主分支...";
                 if (gruntForm != null) {
                     GruntEQCaller.invokeUpdateConnectionLbl(gruntForm, msg);
                 } else {
@@ -226,10 +226,10 @@ public class GruntR implements Runnable, ICommon {
             }
             task.setStatus(abortType);
             if (!runningTask.cancel(true)) {
-                log.warning("failed to cancel running task");
+                log.warning("取消运行任务失败");
             }
         } else {
-            log.fine("told to abort but no task running.");
+            log.fine("以通知中止但是无运行程序.");
         }
         if (abortType == TaskStatus.LOCAL_ABORT) {
             try {
@@ -260,7 +260,7 @@ public class GruntR implements Runnable, ICommon {
     void handleFatalException(Exception ex) {
         //TODO - any general stuff in here?
         ErrorHelper.outputToLogMsgAndKill(gruntForm, gruntcl, log,
-                "Fatal error. Click ok to exit.", ex);
+                "致命错误. 单击确定退出.", ex);
 
         shutdown(false);
     }
@@ -610,7 +610,7 @@ public class GruntR implements Runnable, ICommon {
         @Override
         public String call() {
             if (task == null) {
-                log.severe("task is null!");
+                log.severe("任务为空!");
             } else {    //let's get to work
                 status = GruntStatus.BUSY;
                 
@@ -644,8 +644,8 @@ public class GruntR implements Runnable, ICommon {
                             if (task.getStatus() == TaskStatus.DONE) {
                                 //if successful, send a file too
                                 sendOutputFile();
-                                log.finer("sent output file");
-                                log.finer("task set to null");
+                                log.finer("发送输出文件");
+                                log.finer("任务设置为空");
                                 task = null; //task done and sent, so set to null
                                 if(!gruntQuitting) {
                                     sendHdr(new Hdr(HdrType.IDLE));
@@ -664,7 +664,7 @@ public class GruntR implements Runnable, ICommon {
                         } else {
                             updateStatus(GruntTxtStatus.PENDING_SEND);
 
-                            log.fine("socket closed! will try and send next connect");
+                            log.fine("套接字关闭! 将会重试建立新的连接");
                         }
                     }
                 } else {    //no file caching and transfer - network share
@@ -692,11 +692,11 @@ public class GruntR implements Runnable, ICommon {
                             if(task.isAutoFileTranfer()) {
                                  //if successful, send a file too
                                 sendOutputFile();
-                                log.finer("sent output file");
+                                log.finer("发送输出文件");
                             }
                             //task done (and sent if auto)set to null
                             task = null; 
-                            log.finer("task set to null");
+                            log.finer("任务设置为空");
                             sendHdr(new Hdr(HdrType.IDLE));
                         } else if (task.getStatus() == TaskStatus.LOCAL_ABORT) {
                             task = null;    //ditch current task
@@ -711,13 +711,13 @@ public class GruntR implements Runnable, ICommon {
                     } else {
                         updateStatus(GruntTxtStatus.PENDING_SEND);
 
-                        log.fine("socket closed! will try and send next connect");
+                        log.fine("套接字关闭! 将会重试建立新的连接");
                     }
                 }
             }
             status = GruntStatus.IDLE;
 
-            return "done";
+            return "完成";
         }
 
         /*BEGIN PRIVATE*/
@@ -799,11 +799,9 @@ public class GruntR implements Runnable, ICommon {
 
         private void sendOutputFile() {
             try {
-                File tmpOutFile = new File(lokiTmpDir,
-                        task.getOutputFileName());
+                File tmpOutFile = new File(lokiTmpDir,task.getOutputFileName()); 
                 updateStatus(GruntTxtStatus.SEND, tmpOutFile.length());
-                GruntIOHelper.sendOutputFileToBroker(gruntForm,
-                        tmpOutFile, gruntStreamSock);
+                GruntIOHelper.sendOutputFileToBroker(gruntForm, tmpOutFile, gruntStreamSock);
 
                 //successful, so delete tmp output file
                 tmpOutFile.delete();

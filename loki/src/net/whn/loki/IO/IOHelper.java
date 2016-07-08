@@ -40,85 +40,89 @@ import java.util.zip.ZipInputStream;
 import net.whn.loki.common.ICommon.FileCacheType;
 
 /**
+ * 输入输出助手类
  *
  * @author daniel
  */
 public class IOHelper {
 
     /**
-     * creates the _lokiconf dir in the user's home dir if it doesn't already
-     * exist, also checks read/write permissions to make sure we're ok to
-     * proceed w/ all other filesystem activities.
-     * same stuff for child dir 'fileCache' as well
-     * @return File of lokiBaseDir, null if failed somewhere
+     * 在用户主目录创建loki配置文件夹如果配置不存在的情况下， 还会验证文件夹的读写权限，确保我们处理其他文件系统活动时正常。
+     * 子目录'fileCache'也会做同样处理
+     *
+     * @return Loki文件基础目录File文件对象BaseDir, 如果失败返回null
      */
     public static File setupLokiCfgDir() {
+        //基础目录
         File lokiBaseDir;
+        //缓存目录
         File fileCacheDir;
+        //临时目录
         File tmpDir;
+        //配置文件夹名
         String lokiConfDir = ".loki";
 
-        //first let's retrieve the user's home directory
+        //首先获取用户主目录
         String userHomeDir = System.getProperty("user.home");
 
         if (userHomeDir != null) {
             lokiBaseDir = new File(userHomeDir, lokiConfDir);
-            log.finest("lokiBaseDir: " + lokiBaseDir.getAbsolutePath());
+            log.finest(" Loki文件基础目录lokiBaseDir: " + lokiBaseDir.getAbsolutePath());
         } else {
-            log.severe("couldn't retrieve user.home path!");
+            log.severe("无法获取用户主目录路径!");
             return null;
         }
 
-        //now check if base dir already exists; if not, create it
+        //现在检查基础目录是否存在;如果不存在,创建基础目录
         if (!lokiBaseDir.isDirectory()) {
-            //doesn't exist; create it
+            //如果不存在;创建基础目录
             if (!lokiBaseDir.mkdir()) {
-                log.severe("couldn't create directory:" + lokiConfDir);
+                log.severe("无法创建目录:" + lokiConfDir);
                 return null;
             }
         }
 
-        //now check if it's writable for files and directories
+        //现在检查基础目录是否可以写入文件和文件夹
         if (!isDirWritable(lokiBaseDir)) {
-            log.severe("couldn't write to directory: " + lokiConfDir);
+            log.severe("目录无写入权限: " + lokiConfDir);
             return null;
         }
 
         fileCacheDir = new File(lokiBaseDir, "fileCache");
 
-        //now let's check if fileCache dir already exists; if not create it
+        //现在检查缓存目录是否存在;如果不存在,创建缓存目录
         if (!fileCacheDir.isDirectory()) {
-            //doesn't exist; create it
+            //如果不存在;创建缓存目录
             if (!fileCacheDir.mkdir()) {
-                log.severe("couldn't create directory:" + fileCacheDir.toString());
+                log.severe("无法创建目录:" + fileCacheDir.toString());
                 return null;
             }
         }
 
         if (!isDirWritable(fileCacheDir)) {
-            log.severe("couldn't write to directory:" + fileCacheDir.toString());
+            log.severe("目录无写入权限:" + fileCacheDir.toString());
             return null;
         }
 
         tmpDir = new File(lokiBaseDir, "tmp");
 
-        //if tmp dir exists, delete it and any contents it may have
-        if(tmpDir.isDirectory()) {
+        //如果临时存在目录不, 删除它及其目录下所有内容
+        if (tmpDir.isDirectory()) {
             deleteDirectory(tmpDir);
         }
-        
-        //create empty tmpDir
+
+        //创建空的临时文件夹
         if (!tmpDir.mkdir()) {
-            log.severe("couldn't create directory:" + tmpDir.toString());
+            log.severe("无法创建目录:" + tmpDir.toString());
             return null;
         }
 
         if (!isDirWritable(tmpDir)) {
-            log.severe("couldn't write to directory:" + tmpDir.toString());
+            log.severe("目录无写入权限:" + tmpDir.toString());
             return null;
         }
 
-        //everything checked out, return
+        //所有检查完毕, 返回
         return lokiBaseDir;
     }
 
@@ -131,6 +135,7 @@ public class IOHelper {
 
     /**
      * generates MD5 for given file.
+     *
      * @param oFile
      * @return md5 as hex string, or null if failed
      * @throws IOException
@@ -181,9 +186,10 @@ public class IOHelper {
     }
 
     /**
+     * 设置运行锁
      *
-     * @param lokiCfgDir
-     * @return false if .runningLock file didn't exist, false otherwise
+     * @param lokiCfgDir 配置目录
+     * @return 如果 .runningLock 文件不存在返回false ；否则true，程序已经运行
      * @throws IOException
      */
     public static boolean setupRunningLock(File lokiCfgDir) throws IOException {
@@ -193,12 +199,13 @@ public class IOHelper {
             runningLock.deleteOnExit();
             return false;
         } else {
-            return true;   //oops; loki is already running on this system
+            return true;   //哎呀; loki已经在运行
         }
     }
 
     /**
      * zips up a given directory. skips subdirectories!
+     *
      * @param dir
      * @param outputZipFile
      * @return
@@ -224,6 +231,7 @@ public class IOHelper {
 
     /**
      * creates the output directory, and unzips files contents into it.
+     *
      * @param zipFile contains contents to be unzipped
      * @param outputDir the directory to create and unzip contents into
      * @return true if succeeds, false otherwise
@@ -239,8 +247,8 @@ public class IOHelper {
             }
 
             start = System.currentTimeMillis();
-            ZipInputStream zin =
-                    new ZipInputStream(new FileInputStream(zipFile));
+            ZipInputStream zin
+                    = new ZipInputStream(new FileInputStream(zipFile));
             FileOutputStream fos = null;
 
             ZipEntry zipEntry;
@@ -266,18 +274,24 @@ public class IOHelper {
         return false;
     }
 
+    /**
+     * 删除目录及其所含内容
+     *
+     * @param dir 待删除目录
+     * @return 成功标志
+     */
     public static boolean deleteDirectory(File dir) {
         if (dir.exists()) {
             File[] files = dir.listFiles();
             for (int i = 0; i < files.length; i++) {
                 if (files[i].isDirectory()) {
-                    deleteDirectory(files[i]);
+                    deleteDirectory(files[i]);//递归删除目录下文件
                 } else {
                     files[i].delete();
                 }
             }
         }
-        return (dir.delete());
+        return (dir.delete());//删除目录
     }
 
     public static String generateBlendCacheDirName(String blendFileName) {
@@ -296,6 +310,7 @@ public class IOHelper {
 
     /**
      * converts bytes to a hex string
+     *
      * @param bytes
      * @return
      */
@@ -306,6 +321,7 @@ public class IOHelper {
 
     /**
      * adds a previously copied tmp file into the cache (if it's unique)
+     *
      * @param fileCacheMap
      * @param md5
      * @param lokiCacheDir
@@ -325,24 +341,24 @@ public class IOHelper {
             //new file, so rename and add to map:
 
             //rename file
-            if(fcType == FileCacheType.BLEND) {
+            if (fcType == FileCacheType.BLEND) {
                 md5File = new File(lokiCacheDir, md5 + ".blend");
             } else {
                 md5File = new File(lokiCacheDir, md5);
             }
-            
+
             if (md5File.exists()) {
-                log.warning("fileCache key set is out of sync w/ files:\n" +
-                        "File: " + md5File.getAbsolutePath() +
-                        " already exists; overwriting.");
+                log.warning("fileCache key set is out of sync w/ files:\n"
+                        + "File: " + md5File.getAbsolutePath()
+                        + " already exists; overwriting.");
                 md5File.delete();
             }
             int limit = 0;
             while (!tmpCacheFile.renameTo(md5File)) {
                 if (limit > 9) {
-                    log.severe("failed to rename CacheFile: " +
-                            tmpCacheFile.getAbsolutePath() + " to " +
-                            md5File.getAbsolutePath());
+                    log.severe("failed to rename CacheFile: "
+                            + tmpCacheFile.getAbsolutePath() + " to "
+                            + md5File.getAbsolutePath());
                     throw new IOException("failed to rename CacheFile!");
                 }
                 try {
@@ -375,14 +391,14 @@ public class IOHelper {
 
     /*PRIVATE*/
     //logging
-    private static final String className =
-            "net.whn.loki.common.LokiFileHelper";
+    private static final String className
+            = "net.whn.loki.common.LokiFileHelper";
     private static final Logger log = Logger.getLogger(className);
 
     /**
-     * should be called after a new file has been added to the cache.
-     * if we're over the limit, should iteratively remove oldest used files
-     * until we meet the limit constraint.
+     * should be called after a new file has been added to the cache. if we're
+     * over the limit, should iteratively remove oldest used files until we meet
+     * the limit constraint.
      */
     private static void manageCacheLimit(
             ConcurrentHashMap<String, ProjFile> fileCacheMap, Config cfg) {
@@ -406,9 +422,9 @@ public class IOHelper {
                 }
                 //we now have our delete candidate, so delete it.
 
-                if (!oldestPFile.isInUse() &&
-                        cfg.getJobsModel().isPFileOrphaned(
-                        oldestPFile.getMD5())) {
+                if (!oldestPFile.isInUse()
+                        && cfg.getJobsModel().isPFileOrphaned(
+                                oldestPFile.getMD5())) {
                     if (!oldestPFile.getProjFile().delete()) {
                         log.severe("failed to delete cache file");
                     }
@@ -422,40 +438,44 @@ public class IOHelper {
         }
     }
 
+    /**
+     * 判断目录是否具有写入权限
+     *
+     * @param bDir 基础目录
+     * @return 成功标志
+     */
     private static boolean isDirWritable(File bDir) {
+        //成功标志
         boolean ok = true;
-
+        //临时目录名
         String tDir = "lokiDir";
 
         try {
             if (!bDir.isDirectory()) {
                 ok = false;
             }
-            //can I write a file to current working dir?
+            //是否能在当前工作目录写入一个文件?
             File tempFile = new File(bDir, "loki.tmp");
 
             if (!tempFile.createNewFile()) {
-                ok = false; //couldn't create file
-            } else {  //file was created
-                if (!tempFile.delete()) {
-                    ok = false; //couldn't delete the file
-                }
+                ok = false; //无法创建文件
+            } else //文件创建成功
+            if (!tempFile.delete()) {
+                ok = false; //无法删除文件
             }
 
             if (ok) {
-                //can I write a dir to current working dir?
+                //是否能在当前工作目录写入一个文件夹?
                 File tempDir = new File(bDir, tDir);
                 if (!tempDir.mkdir()) {
-                    ok = false; //couldn't create dir
-                } else {  //dir was created
-                    if (!tempDir.delete()) {
-                        ok = false; //couldn't delete dir
-                    }
+                    ok = false; //无法创建目录
+                } else //目录创建成功
+                if (!tempDir.delete()) {
+                    ok = false; //无法删除目录
                 }
             }
         } catch (IOException ex) {
-            log.severe("couldnt write to directory!" +
-                    ex.getMessage());
+            log.severe("目录无写入权限!" + ex.getMessage());
             ok = false;
         }
 
@@ -481,6 +501,5 @@ public class IOHelper {
             in.close();
         }
     }
-    
-    
+
 }

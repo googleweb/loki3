@@ -38,7 +38,7 @@ public class AddingJobForm extends LokiForm {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Adding job, please wait...");
+        jLabel1.setText("添加任务中, 请等待......");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
