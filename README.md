@@ -9,12 +9,9 @@ can not move tmp render file to output dir.below is my correct codes in /loki/sr
    public static String blender_getRenderedFileName(String stdout) {
         //old example "Saved: /home/daniel/.loki/tmp/0001.png Time: 00:00.31" 
         //new example "Saved: '/home/googlewell/.loki/tmp/0005.png' Time: 00:00.3"
-
         String tmp = null;
-
         Pattern pattern = Pattern.compile("Saved:\\s('?\\S*.png'?)");
         Matcher matcher = pattern.matcher(stdout);
-
         if (matcher.find()) {
             tmp = matcher.group(1);
             if (tmp.startsWith("'") && tmp.endsWith("'")) {
