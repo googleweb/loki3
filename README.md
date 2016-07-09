@@ -26,7 +26,7 @@ can not move tmp render file to output dir.below is my correct codes in /loki/sr
 }
 
 
-2.There have no render time in the grunts list and job details list.The seem reason,the bledner render console output letters have changed.
+2.There have no render time in the grunts list and job details list.The same reason,the bledner render console output letters have changed.
 below is my correct codes in /loki/src/net/whn/loki/CL/CLHelper.java#L104.
 
     public static String extractBlenderRenderTime(String stdout) {
